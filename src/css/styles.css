@@ -1,3 +1,7 @@
+html {
+  
+}
+
 body {
   background: white;
   margin: 0px;
@@ -10,18 +14,27 @@ main {
 }
 
 menu {
+  display: flex;
+  align-items: center;
   margin: 0px;
+  padding-left: 100px;
+  font-family: 'Cinzel', serif;
+  font-size: 2em;
+  list-style: none;
 }
 
 header {
+  position: fixed;
+  top: 0vh;
   display: flex;
-  justify-content: space-between;
-  position: sticky;
-  top: 0px;
   height: 96px;
   width: 100%;
   z-index: 100;
   background: white;
+}
+
+.header--logo-img {
+  justify-content: flex-start;
 }
 
 .banner {
@@ -32,4 +45,9 @@ header {
   top: 40%;
   left: 60%;
   transform: translate(-60%,-60%);
+}
+
+.view-bookings {
+  font-family: inherit;
+  height: 80%;
 }
