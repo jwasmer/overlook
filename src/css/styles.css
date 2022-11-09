@@ -14,13 +14,12 @@ main {
 }
 
 menu {
-  display: flex;
-  align-items: center;
-  margin: 0px;
-  padding-left: 100px;
   font-family: 'Cinzel', serif;
   font-size: 2em;
-  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-top: 48px;
+  padding-left: 100px;
 }
 
 header {
@@ -47,7 +46,74 @@ header {
   transform: translate(-60%,-60%);
 }
 
-.view-bookings {
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 152px;
+}
+
+.room-card {
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  height: 440px;
+  padding-bottom: 96px;
+}
+
+.room-card--book-btn {
+  margin-left: 48px;
+  margin-top: 64px;
+  background-color: rgb(64, 36, 12);
+  color: rgb(236, 225, 209);
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: none;
+  font-size: 1.5em;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+
+.room-card--image {
+  display: flex;
+  margin: 0px;
+  height: 440px;
+  width: 600px;
+  padding-right: 16px;
+}
+
+.room-card--text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 48px;
+  padding-right: 64px;
+  line-height: 1.2em;
+}
+
+.room-card--title {
+  font-family: 'Cinzel', serif;
+  font-size: 2em;
+  font-weight: 600;
+  margin-top: 0px;
+  padding-top: 0px;
+  padding-left: 64px;
+}
+
+.bookings-menu {
   font-family: inherit;
-  height: 80%;
+  list-style: none;
+  padding: 4px;
+}
+
+.bookings-menu:hover {
+  border-bottom: 1px solid rgb(64, 36, 12);;
+  transform: translateY(1px)
 }
