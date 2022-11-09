@@ -5,7 +5,10 @@
 import './css/styles.css';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
-import 'src/images/stanley-hotel-with-mountains.jpeg'
+import './images/stanley-hotel-with-mountains.png';
+import './images/stanley-sky.png';
+import './images/lodge-suite.png';
+import './images/double-bed.png';
+import './images/regular-room.png';
+import './images/overlook-logo.png';
 
-
-console.log('This is the JavaScript entry file - your code begins here.');
