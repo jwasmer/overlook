@@ -12,3 +12,22 @@ import './images/double-bed.png';
 import './images/regular-room.png';
 import './images/overlook-logo.png';
 
+const bookingsMenu = document.querySelector('.bookings-menu')
+const bookingsDropdown = document.querySelector('.bookings-dropdown')
+
+bookingsMenu.addEventListener('click', toggleMenu)
+bookingsDropdown.addEventListener('click', showClick)
+
+function toggleMenu() {
+  if (bookingsDropdown.style.opacity === "0") {
+    bookingsDropdown.style.opacity = "1"
+    bookingsDropdown.style.pointerEvents = "all"
+  } else {
+    bookingsDropdown.style.opacity = "0"
+    bookingsDropdown.style.pointerEvents = "none"
+  }
+}
+
+function showClick() {
+  console.log('click')
+}
