@@ -1,3 +1,135 @@
+@import "~flatpickr/dist/flatpickr.min.css";
+
 body {
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  background: white;
+  margin: 0px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+main {
+  position: relative;
+  top: 60vh;
+  background: white
+}
+
+menu {
+  font-family: 'Cinzel', serif;
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  margin-top: 48px;
+  padding-left: 100px;
+}
+
+header {
+  position: fixed;
+  top: 0vh;
+  display: flex;
+  height: 96px;
+  width: 100%;
+  z-index: 100;
+  background: white;
+}
+
+.header--logo-img {
+  justify-content: flex-start;
+}
+
+.banner {
+  min-width: 100% !important;
+  width: auto !important;
+  min-height: 100%;
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  transform: translate(-60%,-60%);
+}
+
+.bookings-menu {
+  font-family: inherit;
+  font-size: 1em;
+  background-color: white;
+  border: none;
+}
+
+.bookings-menu:hover {
+  border-bottom: 1px solid black;
+  transform: translateY(1px);
+}
+
+.bookings-dropdown {
+  position: absolute;
+  top: 96px;
+  margin: 0px;
+  padding: 4px;
+  height: 240px;
+  width: 360px;
+  background-color: white;
+  opacity: 0;
+  pointer-events: auto;
+  transition-duration: 250ms;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 152px;
+}
+
+.room-card {
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  height: 440px;
+  padding-bottom: 96px;
+}
+
+.room-card--book-btn {
+  margin-left: 48px;
+  margin-top: 64px;
+  background-color: rgb(64, 36, 12);
+  color: rgb(236, 225, 209);
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: none;
+  font-size: 1.5em;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+
+.room-card--image {
+  display: flex;
+  margin: 0px;
+  height: 440px;
+  width: 600px;
+  padding-right: 16px;
+}
+
+.room-card--text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 48px;
+  padding-right: 64px;
+  line-height: 1.2em;
+}
+
+.room-card--title {
+  font-family: 'Cinzel', serif;
+  font-size: 2em;
+  font-weight: 600;
+  margin-top: 0px;
+  padding-top: 0px;
+  padding-left: 0px;
 }
