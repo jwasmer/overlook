@@ -85,7 +85,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 152px;
+  padding-top: 96px;
   margin: 0px;
   overflow: hidden;
 }
@@ -96,10 +96,26 @@ header {
 
 .flatpickr {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding-left: 48px;
-  padding-top: 64px;
   padding-right: 24px;
+  padding-bottom: 96px;
+}
+
+.flatpickr--btn {
+  background-color: rgb(64, 36, 12);
+  color: rgb(236, 225, 209);
+  height: 56px;
+  width: 370px;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: none;
+  font-size: 1.5em;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
 }
 
 .menu--booking {
@@ -124,6 +140,8 @@ header {
 .room-card--book-btn {
   background-color: rgb(64, 36, 12);
   color: rgb(236, 225, 209);
+  margin-left: 48px;
+  margin-top: 64px;
   padding-top: .5em;
   padding-bottom: .5em;
   padding-left: 2em;
@@ -136,9 +154,10 @@ header {
 
 .room-card--date-input {
   margin-left: 24px;
-  width: 320px;
+  width: 200px;
   height: 24px;
   font-size: 1em;
+  font-family: 'Cormorant', serif;
 }
 
 .room-card--image {
@@ -170,4 +189,8 @@ header {
   margin-top: 0px;
   padding-top: 0px;
   padding-left: 0px;
+}
+
+.room-tools-wrapper {
+  padding: 24px;
 }
