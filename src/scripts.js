@@ -13,7 +13,9 @@ import flatpickr from 'flatpickr';
 
 import { fetchAll } from './apiCalls';
 
-// ********** INITIALIZE **********
+// ********** Initialize App **********
+
+// *** Global Variables ***
 let store = {
   usersData: null,
   bookingsData: null,
@@ -21,6 +23,7 @@ let store = {
   currentUser: null,
 }
 
+// *** API calls ***
 fetchAll()
   .then((data) => {
     store.usersData = data.usersData
@@ -32,31 +35,31 @@ fetchAll()
     buildBookingsMenu(store.currentUser, store.bookingsData.bookings, store.roomsData.rooms)
   })
 
+// ********** Event Listeners **********
 const bookingsMenu = document.querySelector('.bookings-menu')
 const bookingsDropdown = document.querySelector('.bookings-dropdown')
-const bookBtn = document.querySelectorAll('.room-card--book-btn')
-const bookingForm = document.querySelectorAll('.flatpickr')
+const buttons = document.querySelectorAll('button')
+const bookingForm = document.querySelector('.flatpickr')
 const viewBookings = document.getElementById('view-bookings')
-
+const findRoomsBtn = document.getElementById('find-rooms-btn')
+const calendarInput = document.getElementById('calendar-input')
 bookingsMenu.addEventListener('click', toggleMenu)
-bookBtn.forEach((button) => {
+buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
     event.preventDefault()
   })
-  button.addEventListener('dblclick', function(e) {
-    console.log(booking)
-  })
 })
 
+// ********** Flatpickr Calendar **********
 const booking = flatpickr(bookingForm, {
   enableTime: false,
-  dateFormat: "F J",
-  mode: "range",
+  dateFormat: "F J, Y",
+  mode: "single",
   minDate: "today",
-  closeOnSelect: false,
   wrap: true
 });
 
+// ********** View Bookings **********
 function toggleMenu() {
   if (bookingsDropdown.style.opacity === "0") {
     bookingsDropdown.style.opacity = ".90"
@@ -78,9 +81,3 @@ function buildBookingsMenu(user, allBookings, allRooms) {
   viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
 }
 
-/*
-GOAL: To store a given booking as a class containing all relevant booking data. POST this data. Have the dropdown menu reflect the changes.
-
-DATA: Calendar data. Room data. User.
-  rooms (4): Residential Suite, Single Room, Junior Suite, Suite, 
-*/

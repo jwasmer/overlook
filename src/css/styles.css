@@ -193,4 +193,10 @@ header {
 
 .room-tools-wrapper {
   padding: 24px;
+  width: 606px;
+  justify-content: space-between
+}
+
+.hidden {
+  display: none;
 }
