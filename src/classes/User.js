@@ -6,7 +6,7 @@ class User {
   
   findAllBookings(bookings) {
     return bookings.filter(booking => {
-      booking.userID === this.id
+      return booking.userID === this.id
     })
   }
 }
