@@ -1,5 +1,9 @@
 @import "~flatpickr/dist/flatpickr.min.css";
 
+html {
+ overflow-x: hidden;
+}
+
 body {
   background: white;
   margin: 0px;
@@ -10,9 +14,9 @@ button:hover {
 }
 
 main {
-  position: relative;
-  top: 60vh;
-  background: white
+  position: fixed, top;
+  background: white;
+  z-index: 100;
 }
 
 menu {
@@ -28,24 +32,27 @@ header {
   position: fixed;
   top: 0vh;
   display: flex;
+  justify-content: space-between;
   height: 96px;
-  width: 100%;
+  width: 100vw;
   z-index: 100;
   background: white;
+  object-fit: contain;
 }
 
 .header--logo-img {
   justify-content: flex-start;
 }
 
+.header-welcome {
+  margin-right: 48px;
+}
+
 .banner {
-  min-width: 100% !important;
-  width: auto !important;
-  min-height: 100%;
-  position: absolute;
-  top: 40%;
-  left: 60%;
-  transform: translate(-60%,-60%);
+  background-position: top, center;
+  object-fit: cover;
+  min-width: 100vw !important;
+  height: 60vh;
 }
 
 .bookings-menu {
@@ -78,6 +85,20 @@ header {
   flex-direction: column;
   align-items: center;
   padding-top: 152px;
+  margin: 0px;
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+}
+
+.flatpickr {
+  display: flex;
+  align-items: center;
+  padding-left: 48px;
+  padding-top: 64px;
+  padding-right: 24px;
 }
 
 .room-card {
@@ -89,8 +110,6 @@ header {
 }
 
 .room-card--book-btn {
-  margin-left: 48px;
-  margin-top: 64px;
   background-color: rgb(64, 36, 12);
   color: rgb(236, 225, 209);
   padding-top: .5em;
@@ -101,6 +120,13 @@ header {
   font-size: 1.5em;
   font-family: 'Cinzel', serif;
   font-weight: 400;
+}
+
+.room-card--date-input {
+  margin-left: 24px;
+  width: 320px;
+  height: 24px;
+  font-size: 1em;
 }
 
 .room-card--image {
