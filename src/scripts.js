@@ -12,6 +12,7 @@ import './images/overlook-logo.png';
 import flatpickr from 'flatpickr';
 
 import { fetchAll } from './apiCalls';
+import Booking from './classes/Booking';
 
 // ********** Initialize App **********
 
@@ -21,21 +22,28 @@ let store = {
   bookingsData: null,
   roomsData: null,
   currentUser: null,
+  search: {
+    bookingDate: null,
+    roomFilter: null,
+    results: null,
+  }
+
 }
 
 // *** API calls ***
 fetchAll()
   .then((data) => {
-    store.usersData = data.usersData
-    store.bookingsData = data.bookingsData
-    store.roomsData = data.roomsData
-    store.currentUser = new User(store.usersData.customers[0])
+    store.usersData = data.usersData.customers
+    store.bookingsData = data.bookingsData.bookings
+    store.roomsData = data.roomsData.rooms
+    store.currentUser = new User(store.usersData[0])
   })
   .then(() => {
-    buildBookingsMenu(store.currentUser, store.bookingsData.bookings, store.roomsData.rooms)
+    buildBookingInstances(store.bookingsData)
+    buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
   })
 
-// ********** Event Listeners **********
+// ********** Element Assignments **********
 const bookingsMenu = document.querySelector('.bookings-menu')
 const bookingsDropdown = document.querySelector('.bookings-dropdown')
 const buttons = document.querySelectorAll('button')
@@ -43,7 +51,10 @@ const bookingForm = document.querySelector('.flatpickr')
 const viewBookings = document.getElementById('view-bookings')
 const findRoomsBtn = document.getElementById('find-rooms-btn')
 const calendarInput = document.getElementById('calendar-input')
+
+// ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
+findRoomsBtn.addEventListener('click', roomSearch)
 buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
     event.preventDefault()
@@ -51,13 +62,25 @@ buttons.forEach((button) => {
 })
 
 // ********** Flatpickr Calendar **********
-const booking = flatpickr(bookingForm, {
+const selectedDate = flatpickr(bookingForm, {
   enableTime: false,
-  dateFormat: "F J, Y",
+  altInput: true,
+  altFormat: "F J, Y",
   mode: "single",
   minDate: "today",
-  wrap: true
+  wrap: true,
+  onChange: function(selectedDates) {
+    const test = new Date(selectedDates)
+    console.log(test)
+    store.search.bookingDate = test
+  }
 });
+
+function roomSearch() {
+  store.search.results = store.currentUser.getVacancies(store.bookingsData, store.search.bookingDate)
+
+  console.log(store.search.results)
+}
 
 // ********** View Bookings **********
 function toggleMenu() {
@@ -70,14 +93,20 @@ function toggleMenu() {
   }
 }
 
-function buildBookingsMenu(user, allBookings, allRooms) {
-  const userBookings = user.findAllBookings(allBookings)
+function buildBookingsMenu(user, bookingsData, roomsData) {
+  const userBookings = user.findAllBookings(bookingsData)
   let totalPrice = 0
+
   userBookings.forEach(booking => {
-    const room = allRooms.find(room => booking.roomNumber === room.number)
-    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.date}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
+    const room = booking.findRoomData(roomsData)
     totalPrice += room.costPerNight
+    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.date}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
   })
   viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
 }
 
+function buildBookingInstances(data) {
+  store.bookingsData = data.map(booking => {
+    return new Booking(booking)
+  })
+}
