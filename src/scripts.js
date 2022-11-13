@@ -27,7 +27,9 @@ fetchAll()
     store.bookingsData = data.bookingsData
     store.roomsData = data.roomsData
     store.currentUser = new User(store.usersData.customers[0])
-    console.log(store.currentUser)
+  })
+  .then(() => {
+    buildBookingsMenu(store.currentUser, store.bookingsData.bookings, store.roomsData.rooms)
   })
 
 const bookingsMenu = document.querySelector('.bookings-menu')
@@ -67,10 +69,13 @@ function toggleMenu() {
 
 function buildBookingsMenu(user, allBookings, allRooms) {
   const userBookings = user.findAllBookings(allBookings)
+  let totalPrice = 0
   userBookings.forEach(booking => {
     const room = allRooms.find(room => booking.roomNumber === room.number)
-    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.date}, Room: ${room.roomType} #${room.number}`
+    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.date}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
+    totalPrice += room.costPerNight
   })
+  viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
 }
 
 /*
