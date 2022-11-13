@@ -6,3 +6,5 @@ class Booking{
     this.roomNum = booking.roomNumber
   }
 }
+
+export default Booking;
