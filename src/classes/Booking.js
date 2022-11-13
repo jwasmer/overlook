@@ -5,6 +5,4 @@ class Booking{
     this.startDate = dates.selectedDates[0];
     this.endDate = dates.selectedDates[1];
   }
-  
-  
 }
