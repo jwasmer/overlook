@@ -1,3 +1,5 @@
+
+
 class User {
   constructor(user) {
     this.name = user.name;
@@ -7,6 +9,12 @@ class User {
   findAllBookings(bookings) {
     return bookings.filter(booking => {
       return booking.userID === this.id
+    })
+  }
+
+  getVacancies(bookings, date) {
+    return bookings.filter(booking => {
+      return booking.date === date
     })
   }
 }
