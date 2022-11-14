@@ -61,10 +61,12 @@ const residentialRoomInfo = document.getElementById('residential-room-info')
 const suiteRoomInfo = document.getElementById('suite-room-info')
 const roomCardInfo = document.querySelectorAll('.room-card--info')
 const roomCardBookBtn = document.querySelectorAll('.room-card--book-btn')
+const modalClose = document.querySelector('.confirmation-modal--close')
 
 // ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
 findRoomsBtn.addEventListener('click', getAllVacancies)
+modalClose.addEventListener('click', hideConfirmationModal)
 
 buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
@@ -104,12 +106,18 @@ function bookRoom() {
   const roomNumber = Number(store.selectedBooking)
 
   postBooking(id, date, roomNumber)
-  confirmBooking(date, roomNumber)
+  showConfirmationModal(date, roomNumber)
 }
 
-function confirmBooking(date, roomNumber) {
-  document.querySelector('aside').classList.remove('hidden')
-  document.querySelector('aside').innerHTML = `<p>Booking confirmed for Room ${roomNumber} on ${date}!`
+function showConfirmationModal(date, roomNumber) {
+  document.querySelector('.confirmation-modal').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--background').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--text').innerText = `Booking Successful! You've booked room ${roomNumber} for ${date}!`
+}
+
+function hideConfirmationModal() {
+  document.querySelector('.confirmation-modal').classList.add('hidden')
+  document.querySelector('.confirmation-modal--background').classList.add('hidden')
 }
 
 function clearSelectedBooking() {
