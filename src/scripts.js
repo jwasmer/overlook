@@ -11,7 +11,7 @@ import './images/overlook-logo.png';
 
 import flatpickr from 'flatpickr';
 
-import { fetchAll } from './apiCalls';
+import { fetchAll, postBooking } from './apiCalls';
 
 // ********** Initialize App **********
 
@@ -60,6 +60,7 @@ const juniorRoomInfo = document.getElementById('junior-room-info')
 const residentialRoomInfo = document.getElementById('residential-room-info')
 const suiteRoomInfo = document.getElementById('suite-room-info')
 const roomCardInfo = document.querySelectorAll('.room-card--info')
+const roomCardBookBtn = document.querySelectorAll('.room-card--book-btn')
 
 // ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
@@ -69,6 +70,10 @@ buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
     event.preventDefault()
   })
+})
+
+roomCardBookBtn.forEach((button) => {
+  button.addEventListener('click', bookRoom)
 })
 
 roomCardInfo.forEach((container) => {
@@ -81,7 +86,7 @@ roomCardInfo.forEach((container) => {
       store.selectedBooking = e.target.id
       e.target.style.backgroundColor = '#ece1d1'
 
-      buttons.forEach((button) => {
+      roomCardBookBtn.forEach((button) => {
         if (buttonRoomType === button.dataset.roomType) {
           button.disabled = false
           button.innerText = "Book Now"
@@ -92,7 +97,20 @@ roomCardInfo.forEach((container) => {
     } 
   })
 })
-  
+
+function bookRoom() {
+  const id = Number(store.currentUser.id)
+  const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
+  const roomNumber = Number(store.selectedBooking)
+
+  postBooking(id, date, roomNumber)
+  confirmBooking(date, roomNumber)
+}
+
+function confirmBooking(date, roomNumber) {
+  document.querySelector('aside').classList.remove('hidden')
+  document.querySelector('aside').innerHTML = `<p>Booking confirmed for Room ${roomNumber} on ${date}!`
+}
 
 function clearSelectedBooking() {
   resetBookingButtons()
@@ -104,7 +122,7 @@ function clearSelectedBooking() {
 }
 
 function resetBookingButtons() {
-  buttons.forEach((button) => {
+  roomCardBookBtn.forEach((button) => {
     if (button.classList.contains('room-card--book-btn')) {
       button.disabled = true
       button.innerText = 'Select Room'
@@ -287,3 +305,5 @@ function buildBookingInstances(data) {
     return new Booking(booking)
   })
 }
+
+export { store };
