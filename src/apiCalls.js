@@ -1,3 +1,5 @@
+import { store } from './scripts'
+
 const fetchData = (url) => {
   return fetch(url).then(response => response.json())
 }
@@ -29,4 +31,22 @@ const fetchAll = () => {
     })
 }
 
-export { fetchData, apiCalls, fetchAll }
+const postBooking = (id, date, roomNumber) => {
+  fetch('http://localhost:3001/api/v1/bookings', {
+    method: 'POST',
+    body: JSON.stringify({ "userID": id, "date": date, "roomNumber": roomNumber }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(data => {
+    store.bookingsData.push(data)
+    console.log(data)
+    console.log(store.bookingsData.length-1)
+  })
+  .catch(err => {
+    console.log(err)
+  });
+}
+
+export { fetchData, apiCalls, fetchAll, postBooking }
