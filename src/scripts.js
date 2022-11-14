@@ -51,6 +51,10 @@ const bookingForm = document.querySelector('.flatpickr')
 const viewBookings = document.getElementById('view-bookings')
 const findRoomsBtn = document.getElementById('find-rooms-btn')
 const calendarInput = document.getElementById('calendar-input')
+const singleRoomCard = document.getElementById('single-room-card')
+const juniorSuiteCard = document.getElementById('junior-suite-card')
+const residentialSuiteCard = document.getElementById('residential-suite-card')
+const suiteCard = document.getElementById('suite-card')
 
 // ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
@@ -74,7 +78,7 @@ const selectedDate = flatpickr(bookingForm, {
   }
 });
 
-function renderVacancies() {
+function getAllVacancies() {
   roomSearch()
   removeBookedRooms()
 
@@ -90,13 +94,37 @@ function removeBookedRooms() {
       result.roomNum === room.number
     })
     if (!isBooked) {
-      vacantRooms.push(room)
+      store.search.vacantRooms.push(room)
     }
   })
 }
 
-function renderUnbookedRooms() {
-  
+function sortRoomType() {
+  store.search.vacantRooms.forEach(vacancy => {
+    if (vacancy.roomType === 'single room') {
+      document.getElementById('single-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
+
+      singleRoomCard.classList.remove('hidden')
+    }
+    
+    if (vacancy.roomType === 'junior suite') {
+      document.getElementById('junior-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
+
+      juniorSuiteCard.classList.remove('hidden')
+    }
+
+    if (vacancy.roomType === 'residential suite') {
+      document.getElementById('residential-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
+
+      residentialSuiteCard.classList.remove('hidden')
+    }
+    
+    if (vacancy.roomType === 'suite') {
+      document.getElementById('suite-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
+
+      suiteCard.classList.remove('hidden')
+    }
+  })
 }
 
 // ********** View Bookings **********
