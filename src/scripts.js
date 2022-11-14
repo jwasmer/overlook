@@ -1,5 +1,6 @@
-import './css/styles.css';
 import User from './classes/user.js'
+import Booking from './classes/Booking';
+import './css/styles.css';
 import './images/stanley-hotel-with-mountains.png';
 import './images/stanley-sky.png';
 import './images/deluxe-suite.png';
@@ -8,11 +9,9 @@ import './images/double-bed.png';
 import './images/regular-room.png';
 import './images/overlook-logo.png';
 
-
 import flatpickr from 'flatpickr';
 
 import { fetchAll } from './apiCalls';
-import Booking from './classes/Booking';
 
 // ********** Initialize App **********
 
@@ -26,6 +25,7 @@ let store = {
     bookingDate: null,
     roomFilter: null,
     results: null,
+    vacantRooms: [],
   }
 
 }
@@ -70,16 +70,33 @@ const selectedDate = flatpickr(bookingForm, {
   minDate: "today",
   wrap: true,
   onChange: function(selectedDates) {
-    const test = new Date(selectedDates)
-    console.log(test)
-    store.search.bookingDate = test
+    store.search.bookingDate = new Date(selectedDates)
   }
 });
 
+function renderVacancies() {
+  roomSearch()
+  removeBookedRooms()
+
+}
+
 function roomSearch() {
   store.search.results = store.currentUser.getVacancies(store.bookingsData, store.search.bookingDate)
+}
 
-  console.log(store.search.results)
+function removeBookedRooms() {
+  store.roomsData.forEach(room => {
+    const isBooked = store.search.results.some(result => {
+      result.roomNum === room.number
+    })
+    if (!isBooked) {
+      vacantRooms.push(room)
+    }
+  })
+}
+
+function renderUnbookedRooms() {
+  
 }
 
 // ********** View Bookings **********
