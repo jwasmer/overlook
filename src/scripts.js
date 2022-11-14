@@ -26,8 +26,8 @@ let store = {
     roomFilter: null,
     results: null,
     vacantRooms: [],
-  }
-
+  },
+  selectedBooking: null,
 }
 
 // *** API calls ***
@@ -47,7 +47,6 @@ fetchAll()
 const bookingsMenu = document.querySelector('.bookings-menu')
 const bookingsDropdown = document.querySelector('.bookings-dropdown')
 const buttons = document.querySelectorAll('button')
-const bookingForm = document.querySelector('.flatpickr')
 const viewBookings = document.getElementById('view-bookings')
 const findRoomsBtn = document.getElementById('find-rooms-btn')
 const calendarInput = document.getElementById('calendar-input')
@@ -55,33 +54,95 @@ const singleRoomCard = document.getElementById('single-room-card')
 const juniorSuiteCard = document.getElementById('junior-suite-card')
 const residentialSuiteCard = document.getElementById('residential-suite-card')
 const suiteCard = document.getElementById('suite-card')
+const searchError = document.getElementById('search-error')
+const singleRoomInfo = document.getElementById('single-room-info')
+const juniorRoomInfo = document.getElementById('junior-room-info')
+const residentialRoomInfo = document.getElementById('residential-room-info')
+const suiteRoomInfo = document.getElementById('suite-room-info')
+const roomCardInfo = document.querySelectorAll('.room-card--info')
 
 // ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
-findRoomsBtn.addEventListener('click', roomSearch)
+findRoomsBtn.addEventListener('click', getAllVacancies)
+
 buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
     event.preventDefault()
   })
 })
 
+roomCardInfo.forEach((container) => {
+  container.addEventListener('click', function(e) {
+
+    const buttonRoomType = e.target.dataset.roomType
+
+    if (e.target.classList.contains('room-card--data') && store.selectedBooking !== e.target.id) {
+      clearSelectedBooking()
+      store.selectedBooking = e.target.id
+      e.target.style.backgroundColor = '#ece1d1'
+
+      buttons.forEach((button) => {
+        if (buttonRoomType === button.dataset.roomType) {
+          button.disabled = false
+          button.innerText = "Book Now"
+        }
+      })
+    } else if (store.selectedBooking === e.target.id) {
+      clearSelectedBooking()
+    } 
+  })
+})
+  
+
+function clearSelectedBooking() {
+  resetBookingButtons()
+
+  if (store.selectedBooking) {
+    document.getElementById(store.selectedBooking).style.backgroundColor = 'white'
+    store.selectedBooking = null;
+  }
+}
+
+function resetBookingButtons() {
+  buttons.forEach((button) => {
+    if (button.classList.contains('room-card--book-btn')) {
+      button.disabled = true
+      button.innerText = 'Select Room'
+    }
+  })
+}
+
+
 // ********** Flatpickr Calendar **********
-const selectedDate = flatpickr(bookingForm, {
+flatpickr(calendarInput, {
   enableTime: false,
   altInput: true,
   altFormat: "F J, Y",
   mode: "single",
   minDate: "today",
-  wrap: true,
   onChange: function(selectedDates) {
-    store.search.bookingDate = new Date(selectedDates)
+    if (selectedDates.length === 0) {
+      findRoomsBtn.innerText = 'Find Available Rooms'
+      store.search.bookingDate = null;
+    } else {
+      findRoomsBtn.innerText = 'Click to Search'
+      store.search.bookingDate = new Date(selectedDates)
+    }
   }
 });
 
 function getAllVacancies() {
-  roomSearch()
-  removeBookedRooms()
-
+  if (store.selectedBooking) {
+    clearSelectedBooking()
+  }
+  if (store.search.bookingDate) {
+    hideRoomCards()
+    clearOldData()
+    roomSearch()
+    removeBookedRooms()
+    sortRoomType()
+    updateSearchButtonText()
+  }
 }
 
 function roomSearch() {
@@ -91,7 +152,7 @@ function roomSearch() {
 function removeBookedRooms() {
   store.roomsData.forEach(room => {
     const isBooked = store.search.results.some(result => {
-      result.roomNum === room.number
+      return result.roomNum === room.number
     })
     if (!isBooked) {
       store.search.vacantRooms.push(room)
@@ -100,31 +161,102 @@ function removeBookedRooms() {
 }
 
 function sortRoomType() {
+  const roomTypeFilter = document.getElementById('room-type-dropdown').value
+  if (roomTypeFilter) {
+    sortRoomTypeFiltered(roomTypeFilter)
+  }
+  else {
+    sortRoomTypeUnfiltered()
+  }
+}
+
+function sortRoomTypeUnfiltered() {
+  if (store.search.results.length === 0) {
+    searchError.classList.remove('hidden')
+  }
+
   store.search.vacantRooms.forEach(vacancy => {
-    if (vacancy.roomType === 'single room') {
-      document.getElementById('single-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
-
-      singleRoomCard.classList.remove('hidden')
+    const bedSize = vacancy.bedSize.charAt(0).toUpperCase() + vacancy.bedSize.slice(1)
+    const bidet = () => {
+      if (vacancy.bidet) {
+        return 'has bidet'
+      } else {
+        return 'no bidet'
+      }
     }
-    
-    if (vacancy.roomType === 'junior suite') {
-      document.getElementById('junior-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
-
-      juniorSuiteCard.classList.remove('hidden')
-    }
-
-    if (vacancy.roomType === 'residential suite') {
-      document.getElementById('residential-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
-
-      residentialSuiteCard.classList.remove('hidden')
-    }
-    
-    if (vacancy.roomType === 'suite') {
-      document.getElementById('suite-vacancies').innerHTML += `<option value="${vacancy.number}">${vacancy.number}</option>`
-
-      suiteCard.classList.remove('hidden')
-    }
+    sortIntoSingleRoom(vacancy, bedSize, bidet)
+    sortIntoJuniorSuite(vacancy, bedSize, bidet)
+    sortIntoResidentialSuite(vacancy, bedSize, bidet)
+    sortIntoSuite(vacancy, bedSize, bidet)
   })
+}
+
+function sortIntoSingleRoom(vacancy, bedSize, bidet) {
+  if (vacancy.roomType === 'single room') {
+    singleRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="single-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+
+    singleRoomCard.classList.remove('hidden')
+  }
+}
+
+function sortIntoJuniorSuite(vacancy, bedSize, bidet) {
+  if (vacancy.roomType === 'junior suite') {
+    juniorRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="junior-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+
+    juniorSuiteCard.classList.remove('hidden')
+  }
+}
+
+function sortIntoResidentialSuite(vacancy, bedSize, bidet) {
+  if (vacancy.roomType === 'residential suite') {
+    residentialRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="residential-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+
+    residentialSuiteCard.classList.remove('hidden')
+  }
+}
+
+function sortIntoSuite(vacancy, bedSize, bidet) {
+  if (vacancy.roomType === 'suite') {
+    suiteRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="suite-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+
+    suiteCard.classList.remove('hidden')
+  }
+}
+
+function sortRoomTypeFiltered(filter) {
+  const filteredVacancies = store.search.vacantRooms.filter(vacancy => {
+    return vacancy.roomType === filter
+  })
+
+  store.search.vacantRooms = filteredVacancies
+  sortRoomTypeUnfiltered()
+}
+
+function updateSearchButtonText() {
+  if (store.search.vacantRooms.length >= 0) {
+    findRoomsBtn.innerText = `${store.search.vacantRooms.length} Vacancies Found!`
+  }
+  else {
+    findRoomsBtn.innerText = `Sold Out`
+  }
+}
+
+function hideRoomCards() {
+  singleRoomCard.classList.add('hidden')
+  juniorSuiteCard.classList.add('hidden')
+  residentialSuiteCard.classList.add('hidden')
+  suiteCard.classList.add('hidden')
+  searchError.classList.add('hidden')
+}
+
+function clearOldData() {
+  singleRoomInfo.innerHTML = ''
+  juniorRoomInfo.innerHTML = ''
+  residentialRoomInfo.innerHTML = ''
+  suiteRoomInfo.innerHTML = ''
+  findRoomsBtn.innerText = 'Find Available Rooms'
+
+  store.search.vacantRooms = []
 }
 
 // ********** View Bookings **********
