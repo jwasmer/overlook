@@ -26,83 +26,68 @@
     <img class="banner" src="./images/stanley-sky.png" alt="a photo of a beautiful hotel">
     <main>
       <section class="cards-container" id="rooms-container">
-        <form class="flatpickr" id="booking-form">
-          <div class="room-tools-wrapper">
-            <button class="input-button flatpickr--btn" id="find-rooms-btn" title="toggle" data-toggle>Find Available Rooms</button>
-            <input class="room-card--date-input" type="text" placeholder="Select dates..." data-input>
-          </div>
-          <div class="room-tools-wrapper">
-            <button class="input-button flatpickr--btn" id="find-rooms-btn" title="toggle">Filter Room Type</button>
+        <form class="search-form" id="booking-form">
+          <button class="search-form--btn" id="find-rooms-btn">Find Available Rooms</button>
+          <div>
+            <input class="room-card--date-input" id="calendar-input" type="text" placeholder="Select dates...">
             <select class="room-card--date-input" name="room-selector" id="room-type-dropdown">
-              <option value="">Select Accomodations... </option>
-              <option value="single-Room">Single Room</option>
-              <option value="junior-suite">Junior Suite</option>
-              <option value="residential-suite">Residential Suite</option>
-              <option value="suite">Suite</option>
+              <option value="">Search All Rooms</option>
+              <option value="single room">Single Rooms</option>
+              <option value="junior suite">Junior Suites</option>
+              <option value="residential suite">Residential Suites</option>
+              <option value="suite">Suites</option>
             </select>
           </div>
         </form>
         <div class="room-card hidden" id="single-room-card">
           <div>
             <article class="room-card--text">
-              <h3 class="room-card--title">Single Room</h3>
-              <p>Vestibulum eget nisl nunc. Nunc faucibus arcu neque, sit amet rutrum enim semper non. Nunc hendrerit id lectus eu sagittis. Nam in lacus imperdiet, vulputate augue a, posuere ligula. Nam pretium ex neque, a hendrerit mi auctor at. In mollis ex non molestie fermentum. Nam porttitor feugiat ante non venenatis.</p>
+              <h3 class="room-card--title">Single Rooms</h3>
+              <div class="room-card--info" id="single-room-info">
+              </div>
             </article>
-            <form>
-              <button class="room-card--book-btn">Book</button>
-              <select class="room-card--date-input" name="single-vacancy-list" id="single-vacancies">
-                <option value="">Select your room... </option>
-              </select>
-            </form>
+            <button class="room-card--book-btn" data-room-type="single-room" disabled>Select Room</button>
           </div>
           <img class="room-card--image" src="./images/regular-room.png" alt="a photo of a single Room">
         </div>
+
         <div class="room-card hidden" id="junior-suite-card">
           <div>
             <article class="room-card--text">
-              <h3 class="room-card--title">Junior Suite</h3>
-              <p>Pellentesque ornare dui sed iaculis lobortis. Fusce nec tortor consequat ligula finibus fermentum in sed arcu. Vivamus efficitur facilisis semper. Aliquam condimentum nisi justo, quis ornare quam interdum eget. Suspendisse vitae arcu sit amet eros euismod placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              <h3 class="room-card--title">Junior Suites</h3>
+              <div class="room-card--info" id="junior-room-info">
+              </div>
             </article>
-            <form>
-              <button class="room-card--book-btn">Book</button>
-              <select class="room-card--date-input" name="single-vacancy-list" id="junior-vacancies">
-                <option value="">Select your room... </option>
-              </select>
-            </form>
+            <button class="room-card--book-btn" data-room-type="junior-room" disabled>Select Room</button>
           </div>
           <img class="room-card--image" src="./images/double-bed.png" alt="a photo of a single Room with two beds ">
         </div>
+
         <div class="room-card hidden" id="residential-suite-card">
           <div>
             <article class="room-card--text">
-              <h3 class="room-card--title">Residential Suite</h3>
-              <p>Nam rhoncus sit amet ex eu lacinia. Curabitur eros tellus, finibus vehicula orci a, gravida pharetra justo. Aenean eu mauris et massa consequat eleifend. Curabitur eros eros, ultrices mollis neque et, porta pellentesque magna. In hac habitasse platea dictumst. Pellentesque tristique scelerisque mi vitae blandit. Sed rutrum elit ut sollicitudin tempor.</p>
+              <h3 class="room-card--title">Residential Suites</h3>
+              <div class="room-card--info" id="residential-room-info">
+              </div>
             </article>
-            <form>
-              <button class="room-card--book-btn">Book</button>
-              <select class="room-card--date-input" name="single-vacancy-list" id="residential-vacancies">
-                <option value="">Select your room... </option>
-              </select>
-            </form>
+            <button class="room-card--book-btn" data-room-type="residential-room" disabled>Select Room</button>
           </div>
           <img class="room-card--image" src="./images/lodge-suite.png" alt="a photo of our luxurious Lodge Suite room">
         </div>
+
         <div class="room-card hidden" id="suite-card">
           <div>
             <article class="room-card--text">
-              <h3 class="room-card--title">Suite</h3>
-              <p>Vestibulum eget nisl nunc. Nunc faucibus arcu neque, sit amet rutrum enim semper non. Nunc hendrerit id lectus eu sagittis. Nam in lacus imperdiet, vulputate augue a, posuere ligula. Nam pretium ex neque, a hendrerit mi auctor at. In mollis ex non molestie fermentum. Nam porttitor feugiat ante non venenatis.</p>
+              <h3 class="room-card--title">Suites</h3>
+              <div class="room-card--info" id="suite-room-info">
+              </div>
             </article>
-            <form>
-              <button class="room-card--book-btn">Book</button>
-              <select class="room-card--date-input" name="single-vacancy-list" id="suite-vacancies">
-                <option value="">Select your room... </option>
-              </select>
-            </form>
+            <button class="room-card--book-btn" data-room-type="suite-room" disabled>Select Room</button>
           </div>
           <img class="room-card--image" src="./images/deluxe-suite.png" alt="a photo of Presidential Suite">
         </div>
-        <h2 class="room-card--title hidden">No Results</h2>
+
+        <h2 class="room-card--title room-card--error hidden" id="search-error">You have our fierciest apologies, no rooms are available on your selected date. Please adjust your date selection and try again.</h2>
       </section>
     </main>
     <script src="bundle.js"></script>
