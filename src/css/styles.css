@@ -40,8 +40,10 @@ menu {
   object-fit: contain;
 }
 
-.header-bar-welcome {
+.header-bar--welcome {
   margin-right: 48px;
+  font-family: 'Cormorant', serif;
+  margin-top: 48px;
 }
 
 .banner {
@@ -143,12 +145,12 @@ menu {
   align-items: center;
   justify-content: center;
   background-color: rgb(255, 255, 255, .8);
-  margin: 15% auto; 
+  margin-top: 15vh; 
   padding: 20px;
   border-top: 3px solid rgb(64, 36, 12);
   border-bottom: 3px solid rgb(64, 36, 12);
   width: 100vw;
-  height: 50%;
+  height: 50vh;
   z-index: 3;
 }
 
@@ -165,6 +167,7 @@ menu {
 }
 
 .login--header {
+  margin-bottom: 5%;
   font-size: xxx-large;
   font-family: 'Cinzel', serif;
   color: rgb(64, 36, 12);
@@ -176,6 +179,8 @@ menu {
   width: 300px;
   height: 30px;
   margin: 8px;
+  font-size: 1em;
+  text-indent: 5%;
 }
 
 .login--btn {
