@@ -9,6 +9,10 @@ class Booking{
   findRoomData(rooms) {
     return rooms.find(room => room.number === this.roomNum)
   }
+
+  displayDate() {
+    return this.date.toISOString().split('T')[0].replaceAll('-', '/')
+  }
 }
 
 export default Booking;

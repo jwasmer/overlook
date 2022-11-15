@@ -9,14 +9,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant:wght@300&display=swap" rel="stylesheet">
     <title>Overlook</title>
   </head>
-
   <body class="background">
+    <img class="login--background" src="./images/stanley-hotel-with-mountains.png" alt="the majestic Grand Overlook Hotel with craggly mountains in the background" id="login-background-img">
+    <form class="login" id="login">
+      <header class="login--header">The Grand Overlook</header>
+      <input class="login--input" id="username" type="text" placeholder="Enter Username...">
+      <input class="login--input" id="password" type="text" placeholder="Enter password...">
+      <button class="login--btn" id="login-btn">Login</button>
+    </form>
     <div class="confirmation-modal--background hidden" id="modal-background"></div>
     <aside class="confirmation-modal hidden" id="modal-box">
       <div class="confirmation-modal--close">&times;</div>
       <p class="confirmation-modal--text">Booking Successful! <br>You've booked room 22 for 3/17/01!</p>
     </aside>
-    <header>
+    <header class="header-bar">
       <div class="flex">
         <img src="./images/overlook-logo.png" alt="a stylized logo featuring digital art of the Overlook hotel with the words 'Grand Overlook' below">
         <menu>
@@ -25,7 +31,7 @@
             </div>
         </menu>
       </div>
-      <div class="header-welcome" id="header-welcome">Welcome</div>
+      <div class="header-bar--welcome" id="header-welcome"></div>
     </header>
     <img class="banner" src="./images/stanley-sky.png" alt="a photo of a beautiful hotel">
     <main>
@@ -43,10 +49,9 @@
             </select>
           </div>
         </section>
-
         <section class="room-card hidden" id="single-room-card">
           <div class="room-card--text">
-            <h3 class="room-card--title">Single Rooms</h3>
+            <header class="room-card--title">Single Rooms</header>
             <ul class="room-card--info" id="single-room-info"></ul>
             <button class="room-card--book-btn" data-room-type="single-room" disabled aria.haspopup="true">Select Room</button>
           </div>
@@ -54,35 +59,32 @@
         </section>
         <section class="room-card hidden" id="junior-suite-card">
           <div class="room-card--text">
-            <h3 class="room-card--title">Junior Suites</h3>
+            <header class="room-card--title">Junior Suites</header>
               <ul class="room-card--info" id="junior-room-info">
               </ul>
             <button class="room-card--book-btn" data-room-type="junior-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/double-bed.png" alt="a photo of a single Room with two beds ">
         </section>
-
         <section class="room-card hidden" id="residential-suite-card">
           <div class="room-card--text">
-            <h3 class="room-card--title">Residential Suites</h3>
+            <header class="room-card--title">Residential Suites</header>
             <ul class="room-card--info" id="residential-room-info">
             </ul>
             <button class="room-card--book-btn" data-room-type="residential-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/lodge-suite.png" alt="a photo of our luxurious Lodge Suite room">
         </section>
-
         <section class="room-card hidden" id="suite-card">
           <div class="room-card--text">
-            <h3 class="room-card--title">Suites</h3>
+            <header class="room-card--title">Suites</header>
             <ul class="room-card--info" id="suite-room-info">
             </ul>
             <button class="room-card--book-btn" data-room-type="suite-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/deluxe-suite.png" alt="a photo of Presidential Suite">
         </section>
-
-        <h2 class="room-card--title room-card--error hidden" id="search-error">You have our fierciest apologies, no rooms are available on your selected date. Please adjust your date selection and try again.</h2>
+        <aside class="room-card--title room-card--error hidden" id="search-error">You have our fierciest apologies, no rooms are available on your selected date. Please adjust your date selection and try again.</aside>
       </section>
     </main>
     <script src="bundle.js"></script>
