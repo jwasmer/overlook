@@ -74,19 +74,16 @@ bookingsMenu.addEventListener('click', toggleMenu)
 findRoomsBtn.addEventListener('click', getAllVacancies)
 modalClose.addEventListener('click', hideConfirmationModal)
 loginBtn.addEventListener('click', userLogin)
-
 buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
     event.preventDefault()
   })
 })
-
 roomCardBookBtn.forEach((button) => {
   button.addEventListener('click', (e) => {
     bookRoom(e)
   })
 })
-
 roomCardInfo.forEach((container) => {
   container.addEventListener('click', function(e) {
     updateAllBookingBtn(e)
@@ -131,11 +128,14 @@ function bookRoom(e) {
       const newBooking = new Booking(data.newBooking)
       store.bookingsData.push(newBooking)
       buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+      getAllVacancies()
     })
     .catch(err => {
       console.log(err)
   });
+
   showConfirmationModal(date, roomNumber)
+  getAllVacancies()
 }
 
 function userLogin() {
