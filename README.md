@@ -39,8 +39,9 @@
   - HTML
   - CSS
   - Mocha/Chai 
-  - Webpack 
+  - Webpack
   - API
+  - Flatpickr
   
 
 ## Features
