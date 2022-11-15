@@ -2,6 +2,7 @@ class User {
   constructor(user) {
     this.name = user.name;
     this.id = user.id
+    this.username = 'customer' + user.id
   }
   
   findAllBookings(bookings) {
