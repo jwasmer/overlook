@@ -31,7 +31,7 @@ describe('Booking.js class file', () => {
 
   it('Should have a property to store the room number of the booking', () => {
     expect(booking1.roomNum).to.deep.equal(1)
-    expect(booking3.roomNum).to.deep.equal(3)
+    expect(booking3.roomNum).to.deep.equal(5)
   })
 
   it('Should have a method to display a date object in the format of YYYY/MM/DD', () => {

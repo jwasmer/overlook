@@ -24,31 +24,31 @@ const testBookingsData =[
     id: "5fwrgu4i7k55hl6uf",
     userID: 2,
     date: "2023/01/09",
-    roomNumber: 1
+    roomNumber: 2
   },
   {
     id: "5fwrgu4i7k55hl6uy",
     userID: 2,
     date: "2023/01/11",
-    roomNumber: 2
+    roomNumber: 3
   },
   {
     id: "5fwrgu4i7k55hl6tl",
     userID: 3,
     date: "2023/01/11",
-    roomNumber: 2
+    roomNumber: 4
   },
   {
     id: "5fwrgu4i7k55hl6v3",
     userID: 3,
     date: "2023/01/11",
-    roomNumber: 3
+    roomNumber: 5
     },
     {
     id: "5fwrgu4i7k55hl6zn",
     userID: 3,
     date: "2022/01/27",
-    roomNumber: 3
+    roomNumber: 6
   }
 ]
 

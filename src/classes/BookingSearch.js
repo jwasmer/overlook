@@ -4,8 +4,6 @@ class BookingSearch {
     this.bookings = bookings
     this.user = currentUser
     this.bookingDate = date
-    this.selectedBooking = {}
-    this.roomFilter = null
     this.results = null
     this.vacantRooms = []
   }
