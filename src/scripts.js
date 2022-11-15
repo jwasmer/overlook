@@ -32,23 +32,6 @@ let store = {
   selectedBooking: {}
 }
 
-// ----- API calls -----
-
-fetchAll()
-  .then((data) => {
-    store.usersData = data.usersData.customers
-    store.bookingsData = data.bookingsData.bookings
-    store.roomsData = data.roomsData.rooms
-    store.currentUser = new User(store.usersData[0])
-  })
-  .then(() => {
-    buildBookingInstances(store.bookingsData)
-    buildUserInstances(store.usersData)
-  })
-  .catch(err => {
-    showErrorModal()
-  })
-
 
 // ********** ELEMENT ASSIGNMENTS **********
 
@@ -79,6 +62,7 @@ const viewBookings = document.getElementById('view-bookings')
 
 
 // ********** Event Listeners **********
+
 bookingsMenu.addEventListener('click', toggleMenu)
 confirmationModalClose.addEventListener('click', hideConfirmationModal)
 errorModalClose.addEventListener('click', hideErrorModal)
@@ -106,7 +90,24 @@ roomCardInfo.forEach((container) => {
 
 // ********** FUNCTIONS **********
 
-// ----- Instantiate Classes -----
+// ----- Initialize Data -----
+
+
+fetchAll()
+  .then((data) => {
+    store.usersData = data.usersData.customers
+    store.bookingsData = data.bookingsData.bookings
+    store.roomsData = data.roomsData.rooms
+    store.currentUser = new User(store.usersData[0])
+  })
+  .then(() => {
+    buildBookingInstances(store.bookingsData)
+    buildUserInstances(store.usersData)
+  })
+  .catch(err => {
+    console.log(err)
+    showErrorModal()
+  })
 
 function buildUserInstances(data) {
   store.usersData = data.map(user => {
@@ -414,6 +415,15 @@ function bookRoom(e) {
   const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
 
   postBooking(id, date, roomNumber)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Status code: ${response.status}
+          Endpoint: ${response.url}`
+        );
+      }
+      return response;
+    })
     .then(response => response.json())
     .then(data => {
       console.log('Data: ', data)
@@ -424,6 +434,7 @@ function bookRoom(e) {
     })
     .catch(err => {
       console.log(err)
+      showErrorModal()
   });
 
   showConfirmationModal(date, roomNumber)

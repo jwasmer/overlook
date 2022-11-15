@@ -1,8 +1,15 @@
-import { store } from './scripts'
-import Booking from './classes/Booking'
-
 const fetchData = (url) => {
-  return fetch(url).then(response => response.json())
+  return fetch(url)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(
+        `Status code: ${response.status}
+        Endpoint: ${response.url}`
+      );
+    }
+    return response;
+  })
+  .then(response => response.json())
 }
 
 const apiCalls = {
@@ -23,13 +30,13 @@ const fetchAll = () => {
     apiCalls.getRoomsData(),
     apiCalls.getBookingsData()
   ])
-    .then(data => {
-      return {
-        usersData: data[0],
-        roomsData: data[1],
-        bookingsData: data[2]
-      }
-    })
+  .then(data => {
+    return {
+      usersData: data[0],
+      roomsData: data[1],
+      bookingsData: data[2]
+    }
+  })
 }
 
 const postBooking = (id, date, roomNumber) => {
