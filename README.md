@@ -22,7 +22,6 @@
   
   Upon entering the correct credentials, the user will be shown a dashboard page containing a calendar widget and can search for available rooms based on the date selected in the widget. The user is offered an additional option to filter based on room type. Additionally, they can click on a "View Bookings" menu to display a history of all bookings they've made at the Grand Overlook. The top righthand corner of the page displays a small "Welcome, user!" message.
 
-  <img width= "1425" alt="Screenshot of user dashboard" src="https://user-images.githubusercontent.com/110298370/201962842-de2656ee-1bb9-4980-ab49-08b95e683082.png">
   <img width= "1425" alt="Screenshot of user dashboard" src="https://user-images.githubusercontent.com/110298370/201963475-2da38144-7d37-4dad-91a0-0fdd8e436722.png">
 
   Upon submitting their search, a user will be shown a list of rooms organized by room type. They can click a room, enabling the "Select Button" and updating it to a "Book Now" button. Clicking "Book Now" will save their booking and display a confirmation popup.
