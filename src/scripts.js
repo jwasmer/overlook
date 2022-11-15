@@ -27,7 +27,7 @@ let store = {
     results: null,
     vacantRooms: [],
   },
-  selectedBooking: null,
+  selectedBooking: {}
 }
 
 // *** API calls ***
@@ -75,37 +75,46 @@ buttons.forEach((button) => {
 })
 
 roomCardBookBtn.forEach((button) => {
-  button.addEventListener('click', bookRoom)
+  button.addEventListener('click', (e) => {
+    bookRoom(e)
+  })
 })
 
-// roomCardInfo.forEach((container) => {
-//   container.addEventListener('click', function(e) {
+roomCardInfo.forEach((container) => {
+  container.addEventListener('click', function(e) {
+    const buttonRoomType = e.target.dataset.roomType
 
-//     const buttonRoomType = e.target.dataset.roomType
+    if (store.selectedBooking !== e.target.id) {
+      store.selectedBooking[e.target.dataset.roomType] = e.target.id
 
-//     if (store.selectedBooking !== e.target.id) {
-//       clearSelectedBooking()
-//       store.selectedBooking = e.target.id
-//       e.target.style.backgroundColor = '#ece1d1'
+      roomCardBookBtn.forEach((button) => {
+        if (buttonRoomType === button.dataset.roomType) {
+          button.disabled = false
+          button.innerText = "Book Now"
+        }
+      })
+    }
+  })
+})
 
-//       roomCardBookBtn.forEach((button) => {
-//         if (buttonRoomType === button.dataset.roomType) {
-//           button.disabled = false
-//           button.innerText = "Book Now"
-//         }
-//       })
-//     } else if (store.selectedBooking === e.target.id) {
-//       clearSelectedBooking()
-//     } 
-//   })
-// })
 
-function bookRoom() {
+
+function bookRoom(e) {
   const id = Number(store.currentUser.id)
   const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
-  const roomNumber = Number(store.selectedBooking)
+  const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
 
   postBooking(id, date, roomNumber)
+    .then(response => response.json())
+    .then(data => {
+      console.log('Data: ', data)
+      const newBooking = new Booking(data.newBooking)
+      store.bookingsData.push(newBooking)
+      buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+    })
+    .catch(err => {
+      console.log(err)
+  });
   showConfirmationModal(date, roomNumber)
 }
 
@@ -119,25 +128,6 @@ function hideConfirmationModal() {
   document.querySelector('.confirmation-modal').classList.add('hidden')
   document.querySelector('.confirmation-modal--background').classList.add('hidden')
 }
-
-function clearSelectedBooking() {
-  resetBookingButtons()
-
-  if (store.selectedBooking) {
-    document.getElementById(store.selectedBooking).style.backgroundColor = 'white'
-    store.selectedBooking = null;
-  }
-}
-
-function resetBookingButtons() {
-  roomCardBookBtn.forEach((button) => {
-    if (button.classList.contains('room-card--book-btn')) {
-      button.disabled = true
-      button.innerText = 'Select Room'
-    }
-  })
-}
-
 
 // ********** Flatpickr Calendar **********
 flatpickr(calendarInput, {
@@ -158,9 +148,7 @@ flatpickr(calendarInput, {
 });
 
 function getAllVacancies() {
-  if (store.selectedBooking) {
-    clearSelectedBooking()
-  }
+  store.selectedBooking = {}
   if (store.search.bookingDate) {
     hideRoomCards()
     clearOldData()
