@@ -208,15 +208,15 @@ header {
   appearance: none;
 }
 
-.room-card--input:checked + label {
-  background-color: #ece1d1;
-}
-
-.room-card--label {
+.room-card--input + label {
   background-color: white;
   transition: background-color 150ms ease-in-out;
   cursor: pointer;
   padding-bottom: 2px;
+}
+
+.room-card--input:checked + label {
+  background-color: #ece1d1;
 }
 
 .room-card--label:hover,
