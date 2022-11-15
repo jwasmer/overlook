@@ -27,7 +27,7 @@ let store = {
     results: null,
     vacantRooms: [],
   },
-  selectedBooking: null,
+  selectedBooking: {}
 }
 
 // *** API calls ***
@@ -75,18 +75,17 @@ buttons.forEach((button) => {
 })
 
 roomCardBookBtn.forEach((button) => {
-  button.addEventListener('click', bookRoom)
+  button.addEventListener('click', (e) => {
+    bookRoom(e)
+  })
 })
 
 roomCardInfo.forEach((container) => {
   container.addEventListener('click', function(e) {
-
     const buttonRoomType = e.target.dataset.roomType
 
-    if (e.target.classList.contains('room-card--data') && store.selectedBooking !== e.target.id) {
-      clearSelectedBooking()
-      store.selectedBooking = e.target.id
-      e.target.style.backgroundColor = '#ece1d1'
+    if (store.selectedBooking !== e.target.id) {
+      store.selectedBooking[e.target.dataset.roomType] = e.target.id
 
       roomCardBookBtn.forEach((button) => {
         if (buttonRoomType === button.dataset.roomType) {
@@ -94,18 +93,26 @@ roomCardInfo.forEach((container) => {
           button.innerText = "Book Now"
         }
       })
-    } else if (store.selectedBooking === e.target.id) {
-      clearSelectedBooking()
-    } 
+    }
   })
 })
 
-function bookRoom() {
+function bookRoom(e) {
   const id = Number(store.currentUser.id)
   const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
-  const roomNumber = Number(store.selectedBooking)
+  const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
 
   postBooking(id, date, roomNumber)
+    .then(response => response.json())
+    .then(data => {
+      console.log('Data: ', data)
+      const newBooking = new Booking(data.newBooking)
+      store.bookingsData.push(newBooking)
+      buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+    })
+    .catch(err => {
+      console.log(err)
+  });
   showConfirmationModal(date, roomNumber)
 }
 
@@ -119,25 +126,6 @@ function hideConfirmationModal() {
   document.querySelector('.confirmation-modal').classList.add('hidden')
   document.querySelector('.confirmation-modal--background').classList.add('hidden')
 }
-
-function clearSelectedBooking() {
-  resetBookingButtons()
-
-  if (store.selectedBooking) {
-    document.getElementById(store.selectedBooking).style.backgroundColor = 'white'
-    store.selectedBooking = null;
-  }
-}
-
-function resetBookingButtons() {
-  roomCardBookBtn.forEach((button) => {
-    if (button.classList.contains('room-card--book-btn')) {
-      button.disabled = true
-      button.innerText = 'Select Room'
-    }
-  })
-}
-
 
 // ********** Flatpickr Calendar **********
 flatpickr(calendarInput, {
@@ -158,9 +146,7 @@ flatpickr(calendarInput, {
 });
 
 function getAllVacancies() {
-  if (store.selectedBooking) {
-    clearSelectedBooking()
-  }
+  store.selectedBooking = {}
   if (store.search.bookingDate) {
     hideRoomCards()
     clearOldData()
@@ -197,10 +183,6 @@ function sortRoomType() {
 }
 
 function sortRoomTypeUnfiltered() {
-  if (store.search.results.length === 0) {
-    searchError.classList.remove('hidden')
-  }
-
   store.search.vacantRooms.forEach(vacancy => {
     const bedSize = vacancy.bedSize.charAt(0).toUpperCase() + vacancy.bedSize.slice(1)
     const bidet = () => {
@@ -215,11 +197,28 @@ function sortRoomTypeUnfiltered() {
     sortIntoResidentialSuite(vacancy, bedSize, bidet)
     sortIntoSuite(vacancy, bedSize, bidet)
   })
+
+  if (store.search.vacantRooms.length === 0) {
+    searchError.classList.remove('hidden')
+  }
 }
 
 function sortIntoSingleRoom(vacancy, bedSize, bidet) {
   if (vacancy.roomType === 'single room') {
-    singleRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="single-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+    singleRoomInfo.tabIndex = "0"
+    singleRoomInfo.innerHTML += 
+    `<input 
+    type="radio" 
+    name="vacant-single" 
+    value="${vacancy.roomType} / ${vacancy.number}"
+    class="room-card--input"
+    id="${vacancy.number}" 
+    data-room-type="single-room" 
+    />
+
+    <label for="${vacancy.number}" class="room-card--label">
+    Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. $${vacancy.costPerNight} per night.
+    </label>`
 
     singleRoomCard.classList.remove('hidden')
   }
@@ -227,7 +226,19 @@ function sortIntoSingleRoom(vacancy, bedSize, bidet) {
 
 function sortIntoJuniorSuite(vacancy, bedSize, bidet) {
   if (vacancy.roomType === 'junior suite') {
-    juniorRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="junior-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+    juniorRoomInfo.tabIndex = "0"
+    juniorRoomInfo.innerHTML +=     
+    `<input 
+    type="radio" 
+    name="vacant-junior" 
+    value="${vacancy.roomType} / ${vacancy.number}"
+    class="room-card--input"
+    id="${vacancy.number}" 
+    data-room-type="junior-room" />
+
+    <label for="${vacancy.number}" class="room-card--label">
+    Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. $${vacancy.costPerNight} per night.
+    </label>`
 
     juniorSuiteCard.classList.remove('hidden')
   }
@@ -235,7 +246,19 @@ function sortIntoJuniorSuite(vacancy, bedSize, bidet) {
 
 function sortIntoResidentialSuite(vacancy, bedSize, bidet) {
   if (vacancy.roomType === 'residential suite') {
-    residentialRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="residential-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+    residentialRoomInfo.tabIndex = "0"
+    residentialRoomInfo.innerHTML +=     
+    `<input 
+    type="radio" 
+    name="vacant-residential" 
+    value="${vacancy.roomType} / ${vacancy.number}"
+    class="room-card--input"
+    id="${vacancy.number}" 
+    data-room-type="residential-room" />
+
+    <label for="${vacancy.number}" class="room-card--label">
+    Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. $${vacancy.costPerNight} per night.
+    </label>`
 
     residentialSuiteCard.classList.remove('hidden')
   }
@@ -243,7 +266,19 @@ function sortIntoResidentialSuite(vacancy, bedSize, bidet) {
 
 function sortIntoSuite(vacancy, bedSize, bidet) {
   if (vacancy.roomType === 'suite') {
-    suiteRoomInfo.innerHTML += `<p class="room-card--data" id="${vacancy.number}" data-room-type="suite-room"> Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. ${vacancy.costPerNight} per night. </p>`
+    suiteRoomInfo.tabIndex = "0"
+    suiteRoomInfo.innerHTML +=     
+    `<input 
+    type="radio" 
+    name="vacant-suite" 
+    value="${vacancy.roomType} / ${vacancy.number}"
+    class="room-card--input"
+    id="${vacancy.number}" 
+    data-room-type="suite-room" />
+
+    <label for="${vacancy.number}" class="room-card--label">
+    Room ${vacancy.number}: ${vacancy.numBeds} ${bedSize} bed(s), ${bidet()}. $${vacancy.costPerNight} per night.
+    </label>`
 
     suiteCard.classList.remove('hidden')
   }

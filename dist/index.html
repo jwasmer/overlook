@@ -29,8 +29,8 @@
     </header>
     <img class="banner" src="./images/stanley-sky.png" alt="a photo of a beautiful hotel">
     <main>
-      <section class="cards-container" id="rooms-container">
-        <form class="search-form" id="booking-form">
+      <form class="cards-container" id="rooms-container">
+        <section class="search-form" id="booking-form">
           <button class="search-form--btn" id="find-rooms-btn">Find Available Rooms</button>
           <div>
             <input class="room-card--date-input" id="calendar-input" type="text" placeholder="Select dates...">
@@ -42,54 +42,45 @@
               <option value="suite">Suites</option>
             </select>
           </div>
-        </form>
-        <div class="room-card hidden" id="single-room-card">
-          <div>
-            <article class="room-card--text">
-              <h3 class="room-card--title">Single Rooms</h3>
-              <div class="room-card--info" id="single-room-info">
-              </div>
-            </article>
-            <button class="room-card--book-btn" data-room-type="single-room" disabled>Select Room</button>
+        </section>
+
+        <section class="room-card hidden" id="single-room-card">
+          <div class="room-card--text">
+            <h3 class="room-card--title">Single Rooms</h3>
+            <ul class="room-card--info" id="single-room-info"></ul>
+            <button class="room-card--book-btn" data-room-type="single-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/regular-room.png" alt="a photo of a single Room">
-        </div>
-
-        <div class="room-card hidden" id="junior-suite-card">
-          <div>
-            <article class="room-card--text">
-              <h3 class="room-card--title">Junior Suites</h3>
-              <div class="room-card--info" id="junior-room-info">
-              </div>
-            </article>
-            <button class="room-card--book-btn" data-room-type="junior-room" disabled>Select Room</button>
+        </section>
+        <section class="room-card hidden" id="junior-suite-card">
+          <div class="room-card--text">
+            <h3 class="room-card--title">Junior Suites</h3>
+              <ul class="room-card--info" id="junior-room-info">
+              </ul>
+            <button class="room-card--book-btn" data-room-type="junior-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/double-bed.png" alt="a photo of a single Room with two beds ">
-        </div>
+        </section>
 
-        <div class="room-card hidden" id="residential-suite-card">
-          <div>
-            <article class="room-card--text">
-              <h3 class="room-card--title">Residential Suites</h3>
-              <div class="room-card--info" id="residential-room-info">
-              </div>
-            </article>
-            <button class="room-card--book-btn" data-room-type="residential-room" disabled>Select Room</button>
+        <section class="room-card hidden" id="residential-suite-card">
+          <div class="room-card--text">
+            <h3 class="room-card--title">Residential Suites</h3>
+            <ul class="room-card--info" id="residential-room-info">
+            </ul>
+            <button class="room-card--book-btn" data-room-type="residential-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/lodge-suite.png" alt="a photo of our luxurious Lodge Suite room">
-        </div>
+        </section>
 
-        <div class="room-card hidden" id="suite-card">
-          <div>
-            <article class="room-card--text">
-              <h3 class="room-card--title">Suites</h3>
-              <div class="room-card--info" id="suite-room-info">
-              </div>
-            </article>
-            <button class="room-card--book-btn" data-room-type="suite-room" disabled>Select Room</button>
+        <section class="room-card hidden" id="suite-card">
+          <div class="room-card--text">
+            <h3 class="room-card--title">Suites</h3>
+            <ul class="room-card--info" id="suite-room-info">
+            </ul>
+            <button class="room-card--book-btn" data-room-type="suite-room" disabled aria.haspopup="true">Select Room</button>
           </div>
           <img class="room-card--image" src="./images/deluxe-suite.png" alt="a photo of Presidential Suite">
-        </div>
+        </section>
 
         <h2 class="room-card--title room-card--error hidden" id="search-error">You have our fierciest apologies, no rooms are available on your selected date. Please adjust your date selection and try again.</h2>
       </section>
