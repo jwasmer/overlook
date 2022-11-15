@@ -11,7 +11,7 @@ class User {
     })
   }
 
-  getVacancies(bookings, date) {
+  findVacancies(bookings, date) {
     return bookings.filter(booking => {
       if (booking.date.getTime() === date.getTime()) {
         return booking.date.getTime() === date.getTime()
