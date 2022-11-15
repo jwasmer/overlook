@@ -40,7 +40,7 @@ fetchAll()
   })
   .then(() => {
     buildBookingInstances(store.bookingsData)
-    buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+    buildUserInstances(store.usersData)
   })
 
 // ********** Element Assignments **********
@@ -62,11 +62,15 @@ const suiteRoomInfo = document.getElementById('suite-room-info')
 const roomCardInfo = document.querySelectorAll('.room-card--info')
 const roomCardBookBtn = document.querySelectorAll('.room-card--book-btn')
 const modalClose = document.querySelector('.confirmation-modal--close')
+const username = document.getElementById('username')
+const password = document.getElementById('password')
+const loginBtn = document.getElementById('login-btn')
 
 // ********** Event Listeners **********
 bookingsMenu.addEventListener('click', toggleMenu)
 findRoomsBtn.addEventListener('click', getAllVacancies)
 modalClose.addEventListener('click', hideConfirmationModal)
+loginBtn.addEventListener('click', userLogin)
 
 buttons.forEach((button) => {
   button.addEventListener('click', function(e) {
@@ -114,6 +118,40 @@ function bookRoom(e) {
       console.log(err)
   });
   showConfirmationModal(date, roomNumber)
+}
+
+function userLogin() {
+  console.log(store.usersData)
+  const validatedUsername = checkUsername()
+  const validatedPassword = checkPassword()
+  validateLogin(validatedUsername, validatedPassword)
+  buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+}
+
+function checkUsername() {
+  const validate = store.usersData.find(element => username.value === element.username)
+  if (validate) {
+    return validate
+  }
+}
+
+function checkPassword() {
+  if (password.value === 'overlook2021') {
+    return true
+  }
+}
+
+function hideLogin() {
+  document.getElementById('login-background-img').classList.add('hidden')
+  document.getElementById('login').classList.add('hidden')
+}
+
+function validateLogin(validatedUsername, validatedPassword) {
+  if (validatedUsername && validatedPassword) {
+    store.currentUser = validatedUsername
+    document.getElementById('header-welcome').innerText = `Welcome back, ${validatedUsername.name}!`
+    hideLogin()
+  }
 }
 
 function showConfirmationModal(date, roomNumber) {
@@ -338,7 +376,7 @@ function buildBookingsMenu(user, bookingsData, roomsData) {
   userBookings.forEach(booking => {
     const room = booking.findRoomData(roomsData)
     totalPrice += room.costPerNight
-    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.date}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
+    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.displayDate()}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
   })
   viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
 }
@@ -346,6 +384,12 @@ function buildBookingsMenu(user, bookingsData, roomsData) {
 function buildBookingInstances(data) {
   store.bookingsData = data.map(booking => {
     return new Booking(booking)
+  })
+}
+
+function buildUserInstances(data) {
+  store.usersData = data.map(user => {
+    return new User(user)
   })
 }
 
