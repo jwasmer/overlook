@@ -1,99 +1,82 @@
-# Webpack Starter Kit
+# 🏨  The Grand Overlook  🏨
 
-## Clone This Repo
 
-That's right, _clone_ not fork. You will use this repo multiple times, but you can only fork a repository once. So here is what you need to do to clone the repo and still be able to push changes to your repo:
+## Table of Contents
+  - [Introduction](#introduction)
+  - [Project Specs](#project-specs)
+  - [Technologies](#technologies)
+  - [Features](#features)
+  - [Deployed Page](#deployed-page)
+  - [Possible Future Extensions](#possible-future-extensions)
+  - [Set Up](#set-up)
+  - [Organizational Resources](#organizational-resources)
+  - [Contributors](#contributors)
+  - [Challenges](#challenges)
 
-1. Clone down this repo. Since you don't want to name your project "webpack-starter-kit", you can use an optional argument when you run `git clone` (you replace the `[...]` with the terminal command arguments): `git clone [remote-address] [what you want to name the repo]`
-1. Remove the default remote: `git remote rm origin` (notice that `git remote -v` not gives you back nothing)
-1. Create a new repo on GitHub with the name of `[what you want to name the repo]` to be consistent with naming
-1. Copy the address that you would use to clone down this repo - something like `git@github.com:...`
-1. Add this remote to your cloned down repo: `git remote add origin [address you copied in the previous step]` - do not include the brackets
 
-Now try to commit something (just add a line in the README) and push it up to your new repo. If everything is setup correctly, you should see the changes on GitHub.
 
-## Setup
+## Introduction
+  The user will be shown a login page before entering the site. The username must be "customer50" (the number 50 can be replaced with any valid user id, currently only 1-50 are valid user ids), and the password is "overlook2021".
 
-After one person has gone through the steps of cloning down this repo and editing the remote, everyone should clone down the repo.
+  <img width= "1425" alt="Screenshot of user login page" src="https://user-images.githubusercontent.com/110298370/201961848-d6bb8072-e0fe-436d-952b-57c24e8c8dcd.png">
+  
+  Upon entering the correct credentials, the user will be shown a dashboard page containing a calendar widget and can search for available rooms based on the date selected in the widget. The user is offered an additional option to filter based on room type. Additionally, they can click on a "View Bookings" menu to display a history of all bookings they've made at the Grand Overlook. The top righthand corner of the page displays a small "Welcome, user!" message.
 
-Then install the library dependencies. Run:
+  <img width= "1425" alt="Screenshot of user dashboard" src="https://user-images.githubusercontent.com/110298370/201962842-de2656ee-1bb9-4980-ab49-08b95e683082.png">
+  <img width= "1425" alt="Screenshot of user dashboard" src="https://user-images.githubusercontent.com/110298370/201963475-2da38144-7d37-4dad-91a0-0fdd8e436722.png">
 
-```bash
-npm install
-```
+  Upon submitting their search, a user will be shown a list of rooms organized by room type. They can click a room, enabling the "Select Button" and updating it to a "Book Now" button. Clicking "Book Now" will save their booking and display a confirmation popup.
 
-To verify that it is setup correctly, run `npm start` in your terminal. Go to `http://localhost:8080/` and you should see a page with the Turing logo image and a beautiful gradient background. If that's the case, you're good to go. Enter `control + c` in your terminal to stop the server at any time.
+  <img width= "1425" alt="Screenshot of user dashboard" src="https://user-images.githubusercontent.com/110298370/201964419-6584a03e-0bfc-4ba7-9d33-1fbcc6b4c81d.png">
 
-## Where to Add Your Code
 
-### JavaScript
+## Project Specs
+  - The project spec & rubric can be found [here](https://frontend.turing.edu/projects/overlook.html)
 
-You have to be very intentional with where you add your feature code. This repo uses a tool called [webpack](https://webpack.js.org/) to combine many JavaScript files into one big file. Webpack enables you to have many, separate JavaScript files to keep your code organized and readable. Webpack expects all of your code files to be in a specific place, or else it doesn't know how to combine them all behind the scenes.
 
-**Create all of your feature code files in the `src` directory.**
+## Technologies
+  - Javascript
+  - HTML
+  - CSS
+  - Mocha/Chai 
+  - Webpack 
+  - API
+  
 
-Since code is separated into multiple files, you need to use the `import` and `export` syntax to share code across file.
+## Features
+- This project features API fetches to collect data on users, bookings, hotel room types, and to save new user bookings.
+- Users can search for available bookings, save bookings, and the vacancy is removed from future searches.
+- A user can review their own bookings.
 
-Here is a video that walks through some information about [import and export](https://www.youtube.com/watch?v=_3oSWwapPKQ). There are a lot of resources out there about `import` and `export`, and resources will sometimes call them `ES6 modules`. It's something you will see in React and beyond.
 
-### HTML
+## Deployed Page
+- This project is currently not deployed, please see Set Up instructions below for directions on running this project locally!
 
-Add the HTML you need in the `index.html` file in the `./dist` directory. There is some boilerplate HTML that exists from the start that you can modify.
 
-### Images
+## Possible Future Extensions
+  - Include "Manager" functionality from project spec.
+  - GitHub Pages integration
 
-Add your image files in the `src/images` directory. Similar to CSS files, you need to `import` image files in the JavaScript entry file (`scripts.js`). Then go into the HTML and add an `img` element with the `src` attribute pointing to the `images` directory. There is an example in the `index.html` file for you to see.
 
-## How to View Your Code in Action
+## Set Up
+1. Fork this repo  
+2. Clone the repo to your local machine
+3. In your terminal, run - `npm install`
+4. View the project by starting the server by running `npm start` and view at  http://localhost:8080/
 
-In the terminal, run:
 
-```bash
-npm start
-```
+## Contributors
+  - [James Wasmer](https://github.com/jwasmer)
+  - [Zachary Walters](https://github.com/zacwalters4) (Reviewer)
 
-You will see a bunch of lines output to your terminal. One of those lines will be something like:
 
-```bash
-Project is running at http://localhost:8080/
-```
+## Challenges
+This was a relatively tight timeline. Unfortunately, some features had to be cut from the final product.
+- "Manager" iteration would been done at the expense of improving error handling and updating class tests
+- Focusing on page accessibility required a rework of the select-a-room functionality that displays after a date is searched. Properly updating the HTML to render elements tab-friendly ate up a much larger amount of time than I had budgeted.
+- Building proper error handling feels resource-intensive for the relatively low incidence it will be used. It's very impactful when it is needed, but it's taken more time than expected.
 
-Go to `http://localhost:8080/` in your browser to view your code running in the browser.
 
----
-
-## Test Files Organization
-
-Similar to feature code, your test code needs to be put in a specific place for it to run successfully.
-
-**Put all of your test files in the `test` directory.** As a convention, all test filenames should end with `-test.js`. For instance: `box-test.js`.
-
-## Running Your Tests
-
-Run your test suite using the command:
-
-```bash
-npm test
-```
-
-The test results will output to the terminal.
-
----
-
-## Linting Your Code
-
-Run the command in your terminal `npm run lint` to run the linter on your JavaScript code. There will be errors and warnings right from the start in this starter kit - the linter is still running successfully.
-
-Your linter will look at the JavaScript files you have within the `src` directory and the `test` directory.
-
-## Webpack?
-
-If you look in the `package.json` file, you'll see one of the library dependencies called `webpack`. If you're interested in learning more about what Webpack is and how it works behind the scenes, take a look through the [Webpack configuration documentation](https://webpack.js.org/concepts/).
-
-## Deploying to GitHub Pages
-
-_If you are finished with the functionality and testing of your project_, then you can consider deploying your project to the web! This way anyone can play it without cloning down your repo.
-
-[GitHub Pages](https://pages.github.com/) is a great way to deploy your project to the web. Don't worry about this until your project is free of bugs and well tested!
-
-If you _are_ done, you can follow [this procedure](./gh-pages-procedure.md) to get your project live on GitHub Pages.
+## Wins
+I was expecting working with API calls to be more problematic. Something clicked between my previous project and this project, though, and building the API calls was almost entirely pain-free.
+ 
