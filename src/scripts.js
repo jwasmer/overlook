@@ -97,8 +97,6 @@ roomCardInfo.forEach((container) => {
   })
 })
 
-
-
 function bookRoom(e) {
   const id = Number(store.currentUser.id)
   const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
