@@ -1,3 +1,4 @@
+import flatpickr from 'flatpickr';
 import User from './classes/user.js'
 import Booking from './classes/Booking';
 import './css/styles.css';
@@ -8,8 +9,6 @@ import './images/lodge-suite.png';
 import './images/double-bed.png';
 import './images/regular-room.png';
 import './images/overlook-logo.png';
-
-import flatpickr from 'flatpickr';
 
 import { fetchAll, postBooking } from './apiCalls';
 
