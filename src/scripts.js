@@ -1,6 +1,7 @@
 import flatpickr from 'flatpickr';
 import User from './classes/user.js'
 import Booking from './classes/Booking';
+import BookingSearch from './classes/BookingSearch';
 import './css/styles.css';
 import './images/stanley-hotel-with-mountains.png';
 import './images/stanley-sky.png';
@@ -22,12 +23,7 @@ let store = {
   bookingsData: null,
   roomsData: null,
   currentUser: null,
-  search: {
-    bookingDate: null,
-    roomFilter: null,
-    results: null,
-    vacantRooms: [],
-  },
+  bookingDate: null,
   selectedBooking: {}
 }
 
@@ -181,15 +177,22 @@ flatpickr(calendarInput, {
   onChange: function(selectedDates) {
     if (selectedDates.length === 0) {
       findRoomsBtn.innerText = 'Find Available Rooms'
-      store.search.bookingDate = null;
+      store.bookingDate = null;
     } else {
       findRoomsBtn.innerText = 'Click to Search'
-      store.search.bookingDate = new Date(selectedDates)
+      store.bookingDate = new Date(selectedDates)
     }
   }
 });
 
 // ----- Bookings Dropdown -----
+
+function resetBookingBtns() {
+  roomCardBookBtn.forEach((button) => {
+    button.disabled = true
+    button.innerText = "Select Room"
+  })
+}
 
 function updateAllBookingBtn(e) {
   const buttonRoomType = e.target.dataset.roomType
@@ -233,13 +236,16 @@ function buildBookingsMenu(user, bookingsData, roomsData) {
 
 function getAllVacancies() {
   store.selectedBooking = {}
-  if (store.search.bookingDate) {
+  console.log(store.bookingDate)
+
+  if (store.bookingDate) {
+    const search = new BookingSearch(store.currentUser, store.bookingDate, store.bookingsData, store.roomsData)
     hideRoomCards()
-    clearOldData()
-    roomSearch()
-    removeBookedRooms()
-    sortRoomType()
-    updateSearchButtonText()
+    clearOldData(search)
+    search.roomSearch()
+    search.removeBookedRooms()
+    sortRoomType(search)
+    updateSearchButtonText(search)
   }
 }
 
@@ -251,43 +257,28 @@ function hideRoomCards() {
   searchError.classList.add('hidden')
 }
 
-function clearOldData() {
+function clearOldData(search) {
   singleRoomInfo.innerHTML = ''
   juniorRoomInfo.innerHTML = ''
   residentialRoomInfo.innerHTML = ''
   suiteRoomInfo.innerHTML = ''
   findRoomsBtn.innerText = 'Find Available Rooms'
 
-  store.search.vacantRooms = []
+  search.vacantRooms = []
 }
 
-function roomSearch() {
-  store.search.results = store.currentUser.getVacancies(store.bookingsData, store.search.bookingDate)
-}
-
-function removeBookedRooms() {
-  store.roomsData.forEach(room => {
-    const isBooked = store.search.results.some(result => {
-      return result.roomNum === room.number
-    })
-    if (!isBooked) {
-      store.search.vacantRooms.push(room)
-    }
-  })
-}
-
-function sortRoomType() {
+function sortRoomType(search) {
   const roomTypeFilter = document.getElementById('room-type-dropdown').value
   if (roomTypeFilter) {
-    sortRoomTypeFiltered(roomTypeFilter)
+    sortRoomTypeFiltered(roomTypeFilter, search)
   }
   else {
-    sortRoomTypeUnfiltered()
+    sortRoomTypeUnfiltered(search)
   }
 }
 
-function sortRoomTypeUnfiltered() {
-  store.search.vacantRooms.forEach(vacancy => {
+function sortRoomTypeUnfiltered(search) {
+  search.vacantRooms.forEach(vacancy => {
     const bedSize = vacancy.bedSize.charAt(0).toUpperCase() + vacancy.bedSize.slice(1)
     const bidet = () => {
       if (vacancy.bidet) {
@@ -296,24 +287,25 @@ function sortRoomTypeUnfiltered() {
         return 'no bidet'
       }
     }
+
     sortIntoSingleRoom(vacancy, bedSize, bidet)
     sortIntoJuniorSuite(vacancy, bedSize, bidet)
     sortIntoResidentialSuite(vacancy, bedSize, bidet)
     sortIntoSuite(vacancy, bedSize, bidet)
   })
 
-  if (store.search.vacantRooms.length === 0) {
+  if (search.vacantRooms.length === 0) {
     searchError.classList.remove('hidden')
   }
 }
 
-function sortRoomTypeFiltered(filter) {
-  const filteredVacancies = store.search.vacantRooms.filter(vacancy => {
+function sortRoomTypeFiltered(filter, search) {
+  const filteredVacancies = search.vacantRooms.filter(vacancy => {
     return vacancy.roomType === filter
   })
 
-  store.search.vacantRooms = filteredVacancies
-  sortRoomTypeUnfiltered()
+  search.vacantRooms = filteredVacancies
+  sortRoomTypeUnfiltered(search)
 }
 
 function sortIntoSingleRoom(vacancy, bedSize, bidet) {
@@ -397,9 +389,9 @@ function sortIntoSuite(vacancy, bedSize, bidet) {
   }
 }
 
-function updateSearchButtonText() {
-  if (store.search.vacantRooms.length >= 0) {
-    findRoomsBtn.innerText = `${store.search.vacantRooms.length} Vacancies Found!`
+function updateSearchButtonText(search) {
+  if (search.vacantRooms.length >= 0) {
+    findRoomsBtn.innerText = `${search.vacantRooms.length} Vacancies Found!`
   }
   else {
     findRoomsBtn.innerText = `Sold Out`
@@ -410,7 +402,7 @@ function updateSearchButtonText() {
 
 function bookRoom(e) {
   const id = Number(store.currentUser.id)
-  const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
+  const date = store.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
   const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
 
   postBooking(id, date, roomNumber)
@@ -425,19 +417,18 @@ function bookRoom(e) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Data: ', data)
       const newBooking = new Booking(data.newBooking)
       store.bookingsData.push(newBooking)
       buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
       getAllVacancies()
+      resetBookingBtns()
     })
     .catch(err => {
       console.log(err)
       showErrorModal()
-  });
+    });
 
   showConfirmationModal(date, roomNumber)
-  getAllVacancies()
 }
 
 function showConfirmationModal(date, roomNumber) {
@@ -450,5 +441,3 @@ function hideConfirmationModal() {
   document.querySelector('.confirmation-modal').classList.add('hidden')
   document.querySelector('.confirmation-modal--background').classList.add('hidden')
 }
-
-export { store };
