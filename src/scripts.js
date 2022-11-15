@@ -1,3 +1,4 @@
+import flatpickr from 'flatpickr';
 import User from './classes/user.js'
 import Booking from './classes/Booking';
 import './css/styles.css';
@@ -9,13 +10,13 @@ import './images/double-bed.png';
 import './images/regular-room.png';
 import './images/overlook-logo.png';
 
-import flatpickr from 'flatpickr';
-
 import { fetchAll, postBooking } from './apiCalls';
 
-// ********** Initialize App **********
 
-// *** Global Variables ***
+// ********** INITIALIZE APP **********
+
+// ----- Global Variables -----
+
 let store = {
   usersData: null,
   bookingsData: null,
@@ -30,46 +31,41 @@ let store = {
   selectedBooking: {}
 }
 
-// *** API calls ***
-fetchAll()
-  .then((data) => {
-    store.usersData = data.usersData.customers
-    store.bookingsData = data.bookingsData.bookings
-    store.roomsData = data.roomsData.rooms
-    store.currentUser = new User(store.usersData[0])
-  })
-  .then(() => {
-    buildBookingInstances(store.bookingsData)
-    buildUserInstances(store.usersData)
-  })
 
-// ********** Element Assignments **********
-const bookingsMenu = document.querySelector('.bookings-menu')
+// ********** ELEMENT ASSIGNMENTS **********
+
 const bookingsDropdown = document.querySelector('.bookings-dropdown')
+const bookingsMenu = document.querySelector('.bookings-menu')
+const confirmationModalClose = document.querySelector('.confirmation-modal--close')
+const errorModalClose = document.querySelector('.error-modal--close')
+
 const buttons = document.querySelectorAll('button')
-const viewBookings = document.getElementById('view-bookings')
-const findRoomsBtn = document.getElementById('find-rooms-btn')
-const calendarInput = document.getElementById('calendar-input')
-const singleRoomCard = document.getElementById('single-room-card')
-const juniorSuiteCard = document.getElementById('junior-suite-card')
-const residentialSuiteCard = document.getElementById('residential-suite-card')
-const suiteCard = document.getElementById('suite-card')
-const searchError = document.getElementById('search-error')
-const singleRoomInfo = document.getElementById('single-room-info')
-const juniorRoomInfo = document.getElementById('junior-room-info')
-const residentialRoomInfo = document.getElementById('residential-room-info')
-const suiteRoomInfo = document.getElementById('suite-room-info')
 const roomCardInfo = document.querySelectorAll('.room-card--info')
 const roomCardBookBtn = document.querySelectorAll('.room-card--book-btn')
-const modalClose = document.querySelector('.confirmation-modal--close')
-const username = document.getElementById('username')
-const password = document.getElementById('password')
+
+const calendarInput = document.getElementById('calendar-input')
+const findRoomsBtn = document.getElementById('find-rooms-btn')
 const loginBtn = document.getElementById('login-btn')
+const juniorRoomInfo = document.getElementById('junior-room-info')
+const juniorSuiteCard = document.getElementById('junior-suite-card')
+const password = document.getElementById('password')
+const residentialRoomInfo = document.getElementById('residential-room-info')
+const residentialSuiteCard = document.getElementById('residential-suite-card')
+const searchError = document.getElementById('search-error')
+const singleRoomCard = document.getElementById('single-room-card')
+const singleRoomInfo = document.getElementById('single-room-info')
+const suiteCard = document.getElementById('suite-card')
+const suiteRoomInfo = document.getElementById('suite-room-info')
+const username = document.getElementById('username')
+const viewBookings = document.getElementById('view-bookings')
+
 
 // ********** Event Listeners **********
+
 bookingsMenu.addEventListener('click', toggleMenu)
+confirmationModalClose.addEventListener('click', hideConfirmationModal)
+errorModalClose.addEventListener('click', hideErrorModal)
 findRoomsBtn.addEventListener('click', getAllVacancies)
-modalClose.addEventListener('click', hideConfirmationModal)
 loginBtn.addEventListener('click', userLogin)
 
 buttons.forEach((button) => {
@@ -86,39 +82,58 @@ roomCardBookBtn.forEach((button) => {
 
 roomCardInfo.forEach((container) => {
   container.addEventListener('click', function(e) {
-    const buttonRoomType = e.target.dataset.roomType
-
-    if (store.selectedBooking !== e.target.id) {
-      store.selectedBooking[e.target.dataset.roomType] = e.target.id
-
-      roomCardBookBtn.forEach((button) => {
-        if (buttonRoomType === button.dataset.roomType) {
-          button.disabled = false
-          button.innerText = "Book Now"
-        }
-      })
-    }
+    updateAllBookingBtn(e)
   })
 })
 
-function bookRoom(e) {
-  const id = Number(store.currentUser.id)
-  const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
-  const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
 
-  postBooking(id, date, roomNumber)
-    .then(response => response.json())
-    .then(data => {
-      console.log('Data: ', data)
-      const newBooking = new Booking(data.newBooking)
-      store.bookingsData.push(newBooking)
-      buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
-    })
-    .catch(err => {
-      console.log(err)
-  });
-  showConfirmationModal(date, roomNumber)
+// ********** FUNCTIONS **********
+
+// ----- Initialize Data -----
+
+
+fetchAll()
+  .then((data) => {
+    store.usersData = data.usersData.customers
+    store.bookingsData = data.bookingsData.bookings
+    store.roomsData = data.roomsData.rooms
+    store.currentUser = new User(store.usersData[0])
+  })
+  .then(() => {
+    buildBookingInstances(store.bookingsData)
+    buildUserInstances(store.usersData)
+  })
+  .catch(err => {
+    console.log(err)
+    showErrorModal()
+  })
+
+function buildUserInstances(data) {
+  store.usersData = data.map(user => {
+    return new User(user)
+  })
 }
+
+function buildBookingInstances(data) {
+  store.bookingsData = data.map(booking => {
+    return new Booking(booking)
+  })
+}
+
+// ----- Error Modal -----
+
+function showErrorModal() {
+  document.querySelector('.error-modal').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--background').classList.remove('hidden')
+  document.querySelector('.error-modal--text').innerText = `Booking Successful! You've booked room ${roomNumber} for ${date}!`
+}
+
+function hideErrorModal() {
+  document.querySelector('.error-modal').classList.add('hidden')
+  document.querySelector('.confirmation-modal--background').classList.add('hidden')
+}
+
+// ----- Login -----
 
 function userLogin() {
   const validatedUsername = checkUsername()
@@ -140,11 +155,6 @@ function checkPassword() {
   }
 }
 
-function hideLogin() {
-  document.getElementById('login-background-img').classList.add('hidden')
-  document.getElementById('login').classList.add('hidden')
-}
-
 function validateLogin(validatedUsername, validatedPassword) {
   if (validatedUsername && validatedPassword) {
     store.currentUser = validatedUsername
@@ -155,18 +165,13 @@ function validateLogin(validatedUsername, validatedPassword) {
   }
 }
 
-function showConfirmationModal(date, roomNumber) {
-  document.querySelector('.confirmation-modal').classList.remove('hidden')
-  document.querySelector('.confirmation-modal--background').classList.remove('hidden')
-  document.querySelector('.confirmation-modal--text').innerText = `Booking Successful! You've booked room ${roomNumber} for ${date}!`
+function hideLogin() {
+  document.getElementById('login-background-img').classList.add('hidden')
+  document.getElementById('login').classList.add('hidden')
 }
 
-function hideConfirmationModal() {
-  document.querySelector('.confirmation-modal').classList.add('hidden')
-  document.querySelector('.confirmation-modal--background').classList.add('hidden')
-}
+// ----- Calendar Widget -----
 
-// ********** Flatpickr Calendar **********
 flatpickr(calendarInput, {
   enableTime: false,
   altInput: true,
@@ -184,6 +189,48 @@ flatpickr(calendarInput, {
   }
 });
 
+// ----- Bookings Dropdown -----
+
+function updateAllBookingBtn(e) {
+  const buttonRoomType = e.target.dataset.roomType
+
+  if (store.selectedBooking !== e.target.id) {
+    store.selectedBooking[e.target.dataset.roomType] = e.target.id
+
+    roomCardBookBtn.forEach((button) => {
+      if (buttonRoomType === button.dataset.roomType) {
+        button.disabled = false
+        button.innerText = "Book Now"
+      }
+    })
+  }
+}
+
+function toggleMenu() {
+  if (bookingsDropdown.style.opacity === "0") {
+    bookingsDropdown.style.opacity = ".90"
+    bookingsDropdown.style.pointerEvents = "all"
+  } else {
+    bookingsDropdown.style.opacity = "0"
+    bookingsDropdown.style.pointerEvents = "none"
+  }
+}
+
+function buildBookingsMenu(user, bookingsData, roomsData) {
+  const userBookings = user.findAllBookings(bookingsData)
+  let totalPrice = 0
+
+  userBookings.forEach(booking => {
+    const room = booking.findRoomData(roomsData)
+    totalPrice += room.costPerNight
+    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.displayDate()}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
+  })
+
+  viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
+}
+
+// ----- Search Vacancies -----
+
 function getAllVacancies() {
   store.selectedBooking = {}
   if (store.search.bookingDate) {
@@ -194,6 +241,24 @@ function getAllVacancies() {
     sortRoomType()
     updateSearchButtonText()
   }
+}
+
+function hideRoomCards() {
+  singleRoomCard.classList.add('hidden')
+  juniorSuiteCard.classList.add('hidden')
+  residentialSuiteCard.classList.add('hidden')
+  suiteCard.classList.add('hidden')
+  searchError.classList.add('hidden')
+}
+
+function clearOldData() {
+  singleRoomInfo.innerHTML = ''
+  juniorRoomInfo.innerHTML = ''
+  residentialRoomInfo.innerHTML = ''
+  suiteRoomInfo.innerHTML = ''
+  findRoomsBtn.innerText = 'Find Available Rooms'
+
+  store.search.vacantRooms = []
 }
 
 function roomSearch() {
@@ -240,6 +305,15 @@ function sortRoomTypeUnfiltered() {
   if (store.search.vacantRooms.length === 0) {
     searchError.classList.remove('hidden')
   }
+}
+
+function sortRoomTypeFiltered(filter) {
+  const filteredVacancies = store.search.vacantRooms.filter(vacancy => {
+    return vacancy.roomType === filter
+  })
+
+  store.search.vacantRooms = filteredVacancies
+  sortRoomTypeUnfiltered()
 }
 
 function sortIntoSingleRoom(vacancy, bedSize, bidet) {
@@ -323,15 +397,6 @@ function sortIntoSuite(vacancy, bedSize, bidet) {
   }
 }
 
-function sortRoomTypeFiltered(filter) {
-  const filteredVacancies = store.search.vacantRooms.filter(vacancy => {
-    return vacancy.roomType === filter
-  })
-
-  store.search.vacantRooms = filteredVacancies
-  sortRoomTypeUnfiltered()
-}
-
 function updateSearchButtonText() {
   if (store.search.vacantRooms.length >= 0) {
     findRoomsBtn.innerText = `${store.search.vacantRooms.length} Vacancies Found!`
@@ -341,57 +406,49 @@ function updateSearchButtonText() {
   }
 }
 
-function hideRoomCards() {
-  singleRoomCard.classList.add('hidden')
-  juniorSuiteCard.classList.add('hidden')
-  residentialSuiteCard.classList.add('hidden')
-  suiteCard.classList.add('hidden')
-  searchError.classList.add('hidden')
+// ----- Book Room -----
+
+function bookRoom(e) {
+  const id = Number(store.currentUser.id)
+  const date = store.search.bookingDate.toISOString().split('T')[0].replaceAll('-', '/')
+  const roomNumber = Number(store.selectedBooking[e.target.dataset.roomType])
+
+  postBooking(id, date, roomNumber)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Status code: ${response.status}
+          Endpoint: ${response.url}`
+        );
+      }
+      return response;
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Data: ', data)
+      const newBooking = new Booking(data.newBooking)
+      store.bookingsData.push(newBooking)
+      buildBookingsMenu(store.currentUser, store.bookingsData, store.roomsData)
+      getAllVacancies()
+    })
+    .catch(err => {
+      console.log(err)
+      showErrorModal()
+  });
+
+  showConfirmationModal(date, roomNumber)
+  getAllVacancies()
 }
 
-function clearOldData() {
-  singleRoomInfo.innerHTML = ''
-  juniorRoomInfo.innerHTML = ''
-  residentialRoomInfo.innerHTML = ''
-  suiteRoomInfo.innerHTML = ''
-  findRoomsBtn.innerText = 'Find Available Rooms'
-
-  store.search.vacantRooms = []
+function showConfirmationModal(date, roomNumber) {
+  document.querySelector('.confirmation-modal').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--background').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--text').innerText = `Booking Successful! You've booked room ${roomNumber} for ${date}!`
 }
 
-// ********** View Bookings **********
-function toggleMenu() {
-  if (bookingsDropdown.style.opacity === "0") {
-    bookingsDropdown.style.opacity = ".90"
-    bookingsDropdown.style.pointerEvents = "all"
-  } else {
-    bookingsDropdown.style.opacity = "0"
-    bookingsDropdown.style.pointerEvents = "none"
-  }
-}
-
-function buildBookingsMenu(user, bookingsData, roomsData) {
-  const userBookings = user.findAllBookings(bookingsData)
-  let totalPrice = 0
-
-  userBookings.forEach(booking => {
-    const room = booking.findRoomData(roomsData)
-    totalPrice += room.costPerNight
-    viewBookings.innerHTML += `<p class="menu--booking"> Date: ${booking.displayDate()}, Room: ${room.roomType} #${room.number}, Price: $${room.costPerNight}</p>`
-  })
-  viewBookings.innerHTML += `<p class="menu--booking"> Total Price: $${Math.round(totalPrice * 100)/100} </p>`
-}
-
-function buildBookingInstances(data) {
-  store.bookingsData = data.map(booking => {
-    return new Booking(booking)
-  })
-}
-
-function buildUserInstances(data) {
-  store.usersData = data.map(user => {
-    return new User(user)
-  })
+function hideConfirmationModal() {
+  document.querySelector('.confirmation-modal').classList.add('hidden')
+  document.querySelector('.confirmation-modal--background').classList.add('hidden')
 }
 
 export { store };
