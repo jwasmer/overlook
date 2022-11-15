@@ -42,6 +42,9 @@ fetchAll()
     buildBookingInstances(store.bookingsData)
     buildUserInstances(store.usersData)
   })
+  .catch(err => {
+    showErrorModal()
+  })
 
 // ********** Element Assignments **********
 const bookingsMenu = document.querySelector('.bookings-menu')
@@ -86,7 +89,12 @@ roomCardBookBtn.forEach((button) => {
 
 roomCardInfo.forEach((container) => {
   container.addEventListener('click', function(e) {
-    const buttonRoomType = e.target.dataset.roomType
+    updateAllBookingBtn(e)
+  })
+})
+
+function updateAllBookingBtn(e) {
+  const buttonRoomType = e.target.dataset.roomType
 
     if (store.selectedBooking !== e.target.id) {
       store.selectedBooking[e.target.dataset.roomType] = e.target.id
@@ -98,8 +106,18 @@ roomCardInfo.forEach((container) => {
         }
       })
     }
-  })
-})
+  }
+
+function showErrorModal() {
+  document.querySelector('.error-modal').classList.remove('hidden')
+  document.querySelector('.confirmation-modal--background').classList.remove('hidden')
+  document.querySelector('.error-modal--text').innerText = `Booking Successful! You've booked room ${roomNumber} for ${date}!`
+}
+
+function hideErrorModal() {
+  document.querySelector('.error-modal').classList.add('hidden')
+  document.querySelector('.confirmation-modal--background').classList.add('hidden')
+}
 
 function bookRoom(e) {
   const id = Number(store.currentUser.id)
