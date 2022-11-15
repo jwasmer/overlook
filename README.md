@@ -18,7 +18,7 @@
 ## Introduction
   The user will be shown a login page before entering the site. The username must be "customer50" (the number 50 can be replaced with any valid user id, currently only 1-50 are valid user ids), and the password is "overlook2021".
 
-  <img width= "1425" alt="Screenshot of user login page" src="https://user-images.githubusercontent.com/110298370/201961848-d6bb8072-e0fe-436d-952b-57c24e8c8dcd.png">
+  <img width= "1425" alt="Screenshot of user login page" src="https://user-images.githubusercontent.com/110298370/201963353-bdcf155d-b565-4902-9d8c-fc736863c72c.png">
   
   Upon entering the correct credentials, the user will be shown a dashboard page containing a calendar widget and can search for available rooms based on the date selected in the widget. The user is offered an additional option to filter based on room type. Additionally, they can click on a "View Bookings" menu to display a history of all bookings they've made at the Grand Overlook. The top righthand corner of the page displays a small "Welcome, user!" message.
 
