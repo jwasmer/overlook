@@ -138,6 +138,13 @@ menu {
   display: flex;
 }
 
+.login--error {
+  margin: 0px;
+  padding: 0px;
+  color: red;
+  opacity: 0;
+}
+
 .login {
   position: fixed;
   display: flex;

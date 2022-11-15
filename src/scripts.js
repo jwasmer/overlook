@@ -121,7 +121,6 @@ function bookRoom(e) {
 }
 
 function userLogin() {
-  console.log(store.usersData)
   const validatedUsername = checkUsername()
   const validatedPassword = checkPassword()
   validateLogin(validatedUsername, validatedPassword)
@@ -151,6 +150,8 @@ function validateLogin(validatedUsername, validatedPassword) {
     store.currentUser = validatedUsername
     document.getElementById('header-welcome').innerText = `Welcome back, ${validatedUsername.name}!`
     hideLogin()
+  } else {
+    document.getElementById('login-error').style.opacity = "1"
   }
 }
 
