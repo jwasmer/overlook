@@ -1,4 +1,5 @@
 import chai from 'chai';
+import Booking from '../src/classes/Booking.js';
 const expect = chai.expect;
 import User from '../src/classes/User.js'
 import { testCustomerData, testBookingsData, testRoomsData } from './data/test-data.js'
@@ -7,11 +8,16 @@ describe('User.js class file', () => {
   let user1;
   let user2;
   let user3;
+  let testBookings
 
   beforeEach(() => {
     user1 = new User(testCustomerData[0])
     user2 = new User(testCustomerData[1])
     user3 = new User(testCustomerData[2])
+
+    testBookings = testBookingsData.map(booking => {
+      return booking = new Booking(booking)
+    })
   })
 
   it('Should have a property that stores the customers id', () => {
@@ -33,9 +39,9 @@ describe('User.js class file', () => {
     expect(user1.findAllBookings(testBookingsData)).to.deep.equal([testBookingsData[0]])
     expect(user2.findAllBookings(testBookingsData)).to.deep.equal([testBookingsData[1], testBookingsData[2]])
   })
-  
+
   it('Should be able to search for vacant rooms', () => {
-    expect(user1.getVacancies()).to.deep.equal()
+    expect(user1.getVacancies(testBookings, new Date("2023/01/11"))).to.deep.equal([testBookings[0], testBookings[2], testBookings[3], testBookings[4]])
   })
 });
 
