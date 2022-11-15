@@ -9,6 +9,14 @@ class User {
       return booking.userID === this.id
     })
   }
+
+  getVacancies(bookings, date) {
+    return bookings.filter(booking => {
+      if (booking.date.getTime() === date.getTime()) {
+        return booking.date.getTime() === date.getTime()
+      }
+    })
+  }
 }
 
 export default User;

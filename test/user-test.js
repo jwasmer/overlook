@@ -26,5 +26,8 @@ describe('User.js class file', () => {
     expect(user1.findAllBookings(testBookingsData)).to.deep.equal([testBookingsData[0]])
     expect(user2.findAllBookings(testBookingsData)).to.deep.equal([testBookingsData[1], testBookingsData[2]])
   })
+  it('Should be able to search for vacant rooms', () => {
+    expect(user1.getVacancies()).to.deep.equal()
+  })
 });
 

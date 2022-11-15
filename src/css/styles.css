@@ -16,7 +16,7 @@ button:hover {
 main {
   position: fixed, top;
   background: white;
-  z-index: 100;
+  z-index: 1;
 }
 
 menu {
@@ -35,7 +35,7 @@ header {
   justify-content: space-between;
   height: 96px;
   width: 100vw;
-  z-index: 100;
+  z-index: 1;
   background: white;
   object-fit: contain;
 }
@@ -76,16 +76,62 @@ header {
   width: auto;
   background-color: white;
   opacity: 0;
-  pointer-events: auto;
+  pointer-events: none;
   transition-duration: 250ms;
   overflow-y: scroll;
+}
+
+.confirmation-modal {
+  position: fixed;
+  background-color: rgb(255, 255, 255, .9);
+  margin: 15% auto; 
+  padding: 20px;
+  border-top: 3px solid rgb(64, 36, 12);
+  border-bottom: 3px solid rgb(64, 36, 12);
+  width: 100vw;
+  height: 50%;
+  z-index: 3;
+}
+
+.confirmation-modal--close {
+  float: right;
+  color: rgb(0, 0, 0);
+  font-size: 28px;
+  font-weight: bold;
+  padding-right: 50px;
+}
+
+.confirmation-modal--text {
+  position: relative;
+  top: 30%;
+  text-align: center;
+  font-family: 'Cormorant', serif;
+  font-size: xxx-large;
+}
+
+.confirmation-modal--close:hover,
+.confirmation-modal--close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.confirmation-modal--background {
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .cards-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 152px;
+  padding-top: 28px;
   margin: 0px;
   overflow: hidden;
 }
@@ -94,12 +140,27 @@ header {
   display: flex;
 }
 
-.flatpickr {
+.search-form {
   display: flex;
   align-items: center;
   padding-left: 48px;
-  padding-top: 64px;
   padding-right: 24px;
+  padding-bottom: 28px;
+}
+
+.search-form--btn {
+  background-color: rgb(64, 36, 12);
+  color: rgb(236, 225, 209);
+  height: 56px;
+  width: 370px;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: none;
+  font-size: 1.5em;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
 }
 
 .menu--booking {
@@ -124,21 +185,58 @@ header {
 .room-card--book-btn {
   background-color: rgb(64, 36, 12);
   color: rgb(236, 225, 209);
+  width: 208px;
+  margin-left: 48px;
+  margin-top: 64px;
   padding-top: .5em;
   padding-bottom: .5em;
-  padding-left: 2em;
-  padding-right: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
   border: none;
   font-size: 1.5em;
   font-family: 'Cinzel', serif;
   font-weight: 400;
 }
 
+.room-card--book-btn:disabled {
+  background-color: rgb(71, 66, 61);
+}
+
+.room-card--data {
+  background-color: white;
+  transition: background-color 150ms ease-in-out;
+  cursor: pointer;
+}
+
+.room-card--data:active {
+  background-color: #ece1d1;
+}
+
+.room-card--data:hover {
+  background-color: lightgray;
+}
+
 .room-card--date-input {
-  margin-left: 24px;
-  width: 320px;
-  height: 24px;
+  margin-left: 12px;
+  width: 164px;
+  height: 28px;
   font-size: 1em;
+  font-family: 'Cormorant', serif;
+  padding: 0px;
+  box-sizing: border-box;
+  align-items: center;
+  white-space: pre;
+}
+
+.room-card--error {
+  width: 600px;
+  text-align: center;
+}
+
+.room-card--info {
+  height: 180px;
+  width: 480px;
+  overflow-y: scroll;
 }
 
 .room-card--image {
@@ -157,10 +255,11 @@ header {
   justify-content: flex-start;
   align-items: flex-start;
   margin: 0px;
-  padding: 0px;
+  padding-top: 24px;
   padding-left: 48px;
   padding-right: 64px;
   line-height: 1.2em;
+  width: 520px;
 }
 
 .room-card--title {
@@ -169,5 +268,16 @@ header {
   font-weight: 600;
   margin-top: 0px;
   padding-top: 0px;
-  padding-left: 0px;
+  padding-left: 48px;
+  padding-right: 64px;
+}
+
+.room-tools-wrapper {
+  padding: 24px;
+  width: 606px;
+  justify-content: space-between
+}
+
+.hidden {
+  display: none;
 }
