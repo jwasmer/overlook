@@ -24,13 +24,17 @@ describe('Booking.js class file', () => {
     expect(booking2.bookingID).to.deep.equal("5fwrgu4i7k55hl6uf")
   })
 
-  it('Should have a property containing the date of the booking', () => {
-    expect(booking1.date).to.deep.equal("2023/01/11")
-    expect(booking2.date).to.deep.equal("2023/01/09")
+  it('Should have a property containing the date object of the booking', () => {
+    expect(booking1.date).to.deep.equal(new Date("2023/01/11"))
+    expect(booking2.date).to.deep.equal(new Date("2023/01/09"))
   })
-  
+
   it('Should have a property to store the room number of the booking', () => {
     expect(booking1.roomNum).to.deep.equal(1)
     expect(booking3.roomNum).to.deep.equal(3)
+  })
+
+  it('Should have a method to display a date object in the format of YYYY/MM/DD', () => {
+    expect(booking1.displayDate()).to.deep.equal("2023/01/11")
   })
 });
