@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant:wght@300&display=swap" rel="stylesheet">
+    <title>Overlook</title>
+  </head>
+  <body class="background">
+    <img class="login--background" src="./images/stanley-hotel-with-mountains.png" alt="the majestic Grand Overlook Hotel with craggly mountains in the background" id="login-background-img">
+    <form class="login" id="login">
+      <header class="login--header">The Grand Overlook</header>
+      <p class="login--error" id="login-error">Invalid username and/or password.</p>
+      <input class="login--input" id="username" type="text" placeholder="Enter Username...">
+      <input class="login--input" id="password" type="text" placeholder="Enter password...">
+      <button class="login--btn" id="login-btn">Login</button>
+    </form>
+    <div class="confirmation-modal--background hidden" id="modal-background"></div>
+    <aside class="confirmation-modal hidden" id="modal-box">
+      <div class="confirmation-modal--close">&times;</div>
+      <p class="confirmation-modal--text">Booking Successful! <br>You've booked room 22 for 3/17/01!</p>
+    </aside>
+    <aside class="error-modal hidden" id="modal-error">
+      <div class="error-modal--close">&times;</div>
+      <p class="error-modal--text">Sorry, something went wrong. Please try again later!</p>
+    </aside>
+    <header class="header-bar">
+      <div class="flex">
+        <img src="./images/overlook-logo.png" alt="a stylized logo featuring digital art of the Overlook hotel with the words 'Grand Overlook' below">
+        <menu>
+            <button class="bookings-menu">View Bookings</button>
+            <div class="bookings-dropdown" id="view-bookings" style="opacity: 0;">
+            </div>
+        </menu>
+      </div>
+      <div class="header-bar--welcome" id="header-welcome"></div>
+    </header>
+    <img class="banner" src="./images/stanley-sky.png" alt="a photo of a beautiful hotel">
+    <main>
+      <form class="cards-container" id="rooms-container">
+        <section class="search-form" id="booking-form">
+          <button class="search-form--btn" id="find-rooms-btn">Find Available Rooms</button>
+          <div>
+            <input class="room-card--date-input" id="calendar-input" type="text" placeholder="Select dates...">
+            <select class="room-card--date-input" name="room-selector" id="room-type-dropdown">
+              <option value="">Search All Rooms</option>
+              <option value="single room">Single Rooms</option>
+              <option value="junior suite">Junior Suites</option>
+              <option value="residential suite">Residential Suites</option>
+              <option value="suite">Suites</option>
+            </select>
+          </div>
+        </section>
+        <section class="room-card hidden" id="single-room-card">
+          <div class="room-card--text">
+            <header class="room-card--title">Single Rooms</header>
+            <ul class="room-card--info" id="single-room-info"></ul>
+            <button class="room-card--book-btn" data-room-type="single-room" disabled aria.haspopup="true">Select Room</button>
+          </div>
+          <img class="room-card--image" src="./images/regular-room.png" alt="a photo of a single Room">
+        </section>
+        <section class="room-card hidden" id="junior-suite-card">
+          <div class="room-card--text">
+            <header class="room-card--title">Junior Suites</header>
+              <ul class="room-card--info" id="junior-room-info">
+              </ul>
+            <button class="room-card--book-btn" data-room-type="junior-room" disabled aria.haspopup="true">Select Room</button>
+          </div>
+          <img class="room-card--image" src="./images/double-bed.png" alt="a photo of a single Room with two beds ">
+        </section>
+        <section class="room-card hidden" id="residential-suite-card">
+          <div class="room-card--text">
+            <header class="room-card--title">Residential Suites</header>
+            <ul class="room-card--info" id="residential-room-info">
+            </ul>
+            <button class="room-card--book-btn" data-room-type="residential-room" disabled aria.haspopup="true">Select Room</button>
+          </div>
+          <img class="room-card--image" src="./images/lodge-suite.png" alt="a photo of our luxurious Lodge Suite room">
+        </section>
+        <section class="room-card hidden" id="suite-card">
+          <div class="room-card--text">
+            <header class="room-card--title">Suites</header>
+            <ul class="room-card--info" id="suite-room-info">
+            </ul>
+            <button class="room-card--book-btn" data-room-type="suite-room" disabled aria.haspopup="true">Select Room</button>
+          </div>
+          <img class="room-card--image" src="./images/deluxe-suite.png" alt="a photo of Presidential Suite">
+        </section>
+        <aside class="room-card--title room-card--error hidden" id="search-error">You have our fierciest apologies, no rooms are available on your selected date. Please adjust your date selection and try again.</aside>
+      </section>
+    </main>
+    <script src="bundle.js"></script>
+  </body>
+</html>
