@@ -9,7 +9,6 @@
   - [Deployed Page](#deployed-page)
   - [Possible Future Extensions](#possible-future-extensions)
   - [Set Up](#set-up)
-  - [Organizational Resources](#organizational-resources)
   - [Contributors](#contributors)
   - [Challenges](#challenges)
 
